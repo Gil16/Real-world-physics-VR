@@ -28,7 +28,7 @@ public class BallManager : MonoBehaviour {
 
     private const float FPS = 0.012f;
 
-    private const float MIN_SPEED = 400f;   //  ////////////////////////////////////////   NOT     FINISHED     !!!!!
+    private const float MIN_SPEED = 2.9f;   //  ////////////////////////////////////////   NOT     FINISHED     !!!!!
 
     private static Vector3[] points = new Vector3[LIMIT];
 
@@ -50,7 +50,7 @@ public class BallManager : MonoBehaviour {
         if (throwing == false)
         {
             // Initialazing coords
-            if (pointA == Vector3.positiveInfinity)
+            if (pointA.Equals(Vector3.positiveInfinity))
             {
                 pointA = trackedObj.transform.position;
                 pointB = trackedObj.transform.position;
@@ -79,10 +79,10 @@ public class BallManager : MonoBehaviour {
                 counter = 2;
             }
             pointB = trackedObj.transform.position;
-            points[counter++] = pointB;
+            points[counter] = pointB;
             currentVelocity = Vector3.Distance(points[counter], points[counter-1]) / FPS;
             lastVelocity = Vector3.Distance(points[counter - 1], points[counter - 2]) / FPS;
-            if (currentVelocity > lastVelocity)
+            if (currentVelocity < lastVelocity)
             {
                 // calculate the vector of throwing, throwing speed, make it rigid, usen gravity, counter=0
                 Vector3 throwingDirection = points[counter] - points[counter - 1];
@@ -94,12 +94,16 @@ public class BallManager : MonoBehaviour {
 
                 currentBall.transform.parent = null;
                 currentBall = null;
+                throwing = false;
                 counter = 0;
+
+            } else {
+                counter++;
             }
             
         }
 
-        lastVelocity = currentVelocity;
+    //    lastVelocity = currentVelocity;
         pointA = pointB;
     }
    
@@ -109,7 +113,6 @@ public class BallManager : MonoBehaviour {
     {
         if (currentBall == null)
         {
-            counter++;
             currentBall = Instantiate(ballPrefab);
             currentBall.transform.parent = trackedObj.transform;
             currentBall.transform.position = trackedObj.transform.position + new Vector3(0.037f, -0.081f, 0.15f);
