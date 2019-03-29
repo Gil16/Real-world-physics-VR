@@ -13,6 +13,10 @@ public class BallManager : MonoBehaviour {
 
     public GameObject ballPrefab;
 
+    public GameObject planePrefab;
+
+
+
 
     private static int counter = 0;
 
@@ -94,6 +98,7 @@ public class BallManager : MonoBehaviour {
 
                 currentBall.transform.parent = null;
                 currentBall = null;
+           //     Destroy(currentBall);
                 throwing = false;
                 counter = 0;
 
@@ -103,13 +108,12 @@ public class BallManager : MonoBehaviour {
             
         }
 
-    //    lastVelocity = currentVelocity;
+        lastVelocity = currentVelocity;
         pointA = pointB;
     }
-   
 
 
-        public void attachBall()
+    public void attachBall()
     {
         if (currentBall == null)
         {
