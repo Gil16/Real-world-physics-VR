@@ -28,7 +28,7 @@ public class BallManager : MonoBehaviour {
 
     private const int LIMIT = 5000;
 
-    private const int SPEED_MULTIPLIER = 4000;
+    private const int SPEED_MULTIPLIER = 4750;
 
     private const float FPS = 0.012f;
 
@@ -86,11 +86,11 @@ public class BallManager : MonoBehaviour {
             points[counter] = pointB;
             currentVelocity = Vector3.Distance(points[counter], points[counter-1]) / FPS;
             lastVelocity = Vector3.Distance(points[counter - 1], points[counter - 2]) / FPS;
-            if (currentVelocity < lastVelocity)
+            if (currentVelocity < (lastVelocity * 0.85))
             {
                 // calculate the vector of throwing, throwing speed, make it rigid, usen gravity, counter=0
-                Vector3 throwingDirection = points[0] - points[counter];            // not finishedddddddddddddddddddddddddddd
-                float throwingVelocity = currentVelocity * SPEED_MULTIPLIER;
+                Vector3 throwingDirection = points[counter/2] - points[counter];            // not finishedddddddddddddddddddddddddddd
+              //  float throwingVelocity = currentVelocity * SPEED_MULTIPLIER;
 
                 if (currentBall.GetComponent<Rigidbody>() == null)
                 {
@@ -120,7 +120,7 @@ public class BallManager : MonoBehaviour {
         {
             currentBall = Instantiate(ballPrefab);
             currentBall.transform.parent = trackedObj.transform;
-            currentBall.transform.position = trackedObj.transform.position + new Vector3(0.037f, -0.081f, 0.15f);
+            currentBall.transform.position = trackedObj.transform.position; //+ new Vector3(0.037f, -0.081f, 0.15f);
             currentBall.transform.localRotation = Quaternion.identity;
         }
     }
