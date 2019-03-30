@@ -45,6 +45,10 @@ public class BallManager : MonoBehaviour {
 	void Update () {
         attachBall();
         Fire();
+        if (currentBall.transform.position.y < 1)
+        {
+            Destroy(currentBall);
+        }
     }
 
     private void Fire()

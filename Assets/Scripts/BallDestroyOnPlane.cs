@@ -22,7 +22,6 @@ public class BallDestroyOnPlane : MonoBehaviour {
         }
         else if (collision.gameObject.name == "Cube")
         {
-
             Destroy(gameObject);
         }
     }
