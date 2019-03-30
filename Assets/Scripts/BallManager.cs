@@ -28,7 +28,7 @@ public class BallManager : MonoBehaviour {
 
     private const int LIMIT = 5000;
 
-    private const int SPEED_MULTIPLIER = 4750;
+    private const int SPEED_MULTIPLIER = 90;
 
     private const float FPS = 0.012f;
 
@@ -93,13 +93,19 @@ public class BallManager : MonoBehaviour {
             if (currentVelocity < (lastVelocity * 0.85))
             {
 
-                Vector3 throwingDirection = points[counter/2] - points[counter];            // not finishedddddddddddddddddddddddddddd
-              //  float throwingVelocity = currentVelocity * SPEED_MULTIPLIER;
+                Vector3 throwingDirection=new Vector3();            // not finishedddddddddddddddddddddddddddd
+                for (int i =  0 ; i < counter; i++) {
+                    throwingDirection = throwingDirection + points[i];
+                }
+                throwingDirection = throwingDirection / (counter);
+                throwingDirection = Vector3.MoveTowards(throwingDirection, points[0], 1f);
+                throwingDirection = throwingDirection * (-1);
+                float throwingVelocity = currentVelocity * SPEED_MULTIPLIER;
 
                 if (currentBall.GetComponent<Rigidbody>() == null)
                 {
                     currentBall.AddComponent<Rigidbody>();
-                    currentBall.GetComponent<Rigidbody>().AddRelativeForce(throwingDirection * SPEED_MULTIPLIER, ForceMode.Force);
+                    currentBall.GetComponent<Rigidbody>().AddRelativeForce(throwingDirection * throwingVelocity, ForceMode.Force);
                     currentBall.GetComponent<Rigidbody>().useGravity = true;
                 }
 
