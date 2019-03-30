@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
 
-public class BallManager : MonoBehaviour {
+public class LeftHand_BallManager : MonoBehaviour
+{
 
-    public static BallManager Instance;
+    public static LeftHand_BallManager Instance;
 
     public SteamVR_TrackedObject trackedObj;
 
@@ -38,11 +39,13 @@ public class BallManager : MonoBehaviour {
 
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         attachBall();
         Fire();
         if (currentBall.transform.position.y < 1)
@@ -63,7 +66,9 @@ public class BallManager : MonoBehaviour {
                 pointA = trackedObj.transform.position;
                 pointB = trackedObj.transform.position;
                 lastVelocity = 0;
-            } else {
+            }
+            else
+            {
                 pointB = trackedObj.transform.position;
             }
 
@@ -76,29 +81,31 @@ public class BallManager : MonoBehaviour {
                 points[counter++] = pointB;
             }
 
-        } else {
-            
+        }
+        else
+        {
+
             // Counter reached the points array limit, we copy 3 coords and continuing
             if (counter == LIMIT - 1)
             {
-                points[0] = points[counter-2];
+                points[0] = points[counter - 2];
                 points[1] = points[counter - 1];
                 points[2] = points[counter];
                 counter = 2;
             }
             pointB = trackedObj.transform.position;
             points[counter] = pointB;
-            currentVelocity = Vector3.Distance(points[counter], points[counter-1]) / FPS;
+            currentVelocity = Vector3.Distance(points[counter], points[counter - 1]) / FPS;
             lastVelocity = Vector3.Distance(points[counter - 1], points[counter - 2]) / FPS;
             if (currentVelocity < (lastVelocity * 0.85))
             {
 
-                Vector3 throwingDirection=new Vector3();            // not finishedddddddddddddddddddddddddddd
-                for (int i =  0 ; i < counter; i++) {
+                Vector3 throwingDirection = new Vector3();
+                for (int i = 0; i < counter /2 ; i++)
+                {
                     throwingDirection = throwingDirection + points[i];
                 }
-                throwingDirection = throwingDirection / (counter);
-                throwingDirection = Vector3.MoveTowards(throwingDirection, points[0], 1f);
+                throwingDirection = throwingDirection / (counter/2 );                
                 throwingDirection = throwingDirection * (-1);
                 float throwingVelocity = currentVelocity * SPEED_MULTIPLIER;
 
@@ -113,10 +120,12 @@ public class BallManager : MonoBehaviour {
                 throwing = false;
                 counter = 0;
 
-            } else {
+            }
+            else
+            {
                 counter++;
             }
-            
+
         }
 
         lastVelocity = currentVelocity;
