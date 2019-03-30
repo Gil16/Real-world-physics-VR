@@ -79,7 +79,7 @@ public class BallManager : MonoBehaviour {
         } else {
             
             // Counter reached the points array limit, we copy 3 coords and continuing
-            if (counter == LIMIT)
+            if (counter == LIMIT - 1)
             {
                 points[0] = points[counter-2];
                 points[1] = points[counter - 1];

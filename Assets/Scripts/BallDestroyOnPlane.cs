@@ -20,7 +20,7 @@ public class BallDestroyOnPlane : MonoBehaviour {
         {
             Destroy(gameObject);
         }
-        else if (collision.gameObject.name == "Cube")
+        else if (collision.gameObject.name == "Cube(Clone)")
         {
             Destroy(collision.gameObject);
             Destroy(gameObject);
