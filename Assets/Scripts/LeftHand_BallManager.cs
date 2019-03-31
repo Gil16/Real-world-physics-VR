@@ -29,7 +29,7 @@ public class LeftHand_BallManager : MonoBehaviour
 
     private const int LIMIT = 5000;
 
-    private const int SPEED_MULTIPLIER = 90;
+    private const int SPEED_MULTIPLIER = 9;
 
     private const float FPS = 0.012f;
 
@@ -101,14 +101,31 @@ public class LeftHand_BallManager : MonoBehaviour
             {
 
                 Vector3 throwingDirection = new Vector3();
-                for (int i = 0; i < counter /2 ; i++)
-                {
-                    throwingDirection = throwingDirection + points[i];
+                int sum = 0;
+                for (int i = 0; i <= counter / 2; i++) {
+                    throwingDirection = throwingDirection + (points[i] * i);
                 }
-                throwingDirection = throwingDirection / (counter/2 );                
-                throwingDirection = throwingDirection * (-1);
-                float throwingVelocity = currentVelocity * SPEED_MULTIPLIER;
+                for (int i = counter; i > counter / 2; i--) {
+                    throwingDirection = throwingDirection + (points[i] * i);
+                }
+                sum = (counter * counter / 8);
+                if (counter % 2 == 1)
+                {
+                    sum += (counter * counter / 8);
+                }
+                else {
+                    sum += (((counter - 1) * (counter - 1) / 8));
+                }
+                float throwingDistance = 0f;
+                for (int i = 0; i < counter; i++){
+                    throwingDistance += points[i].sqrMagnitude;
+                }
+                 float throwingVelocity = SPEED_MULTIPLIER * (throwingDistance) / (counter);
+                
 
+                throwingDirection = throwingDirection / sum;
+                throwingDirection = throwingDirection * (-1);
+                
                 if (currentBall.GetComponent<Rigidbody>() == null)
                 {
                     currentBall.AddComponent<Rigidbody>();

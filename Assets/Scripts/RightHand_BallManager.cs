@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
 
-public class RightHand_BallManager : MonoBehaviour {
+public class RightHand_BallManager : MonoBehaviour
+{
 
     public static RightHand_BallManager Instance;
 
@@ -28,7 +29,7 @@ public class RightHand_BallManager : MonoBehaviour {
 
     private const int LIMIT = 5000;
 
-    private const int SPEED_MULTIPLIER = 90;
+    private const int SPEED_MULTIPLIER = 9;
 
     private const float FPS = 0.012f;
 
@@ -38,11 +39,13 @@ public class RightHand_BallManager : MonoBehaviour {
 
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         attachBall();
         Fire();
         if (currentBall.transform.position.y < 1)
@@ -63,7 +66,9 @@ public class RightHand_BallManager : MonoBehaviour {
                 pointA = trackedObj.transform.position;
                 pointB = trackedObj.transform.position;
                 lastVelocity = 0;
-            } else {
+            }
+            else
+            {
                 pointB = trackedObj.transform.position;
             }
 
@@ -76,30 +81,54 @@ public class RightHand_BallManager : MonoBehaviour {
                 points[counter++] = pointB;
             }
 
-        } else {
-            
+        }
+        else
+        {
+
             // Counter reached the points array limit, we copy 3 coords and continuing
             if (counter == LIMIT - 1)
             {
-                points[0] = points[counter-2];
+                points[0] = points[counter - 2];
                 points[1] = points[counter - 1];
                 points[2] = points[counter];
                 counter = 2;
             }
             pointB = trackedObj.transform.position;
             points[counter] = pointB;
-            currentVelocity = Vector3.Distance(points[counter], points[counter-1]) / FPS;
+            currentVelocity = Vector3.Distance(points[counter], points[counter - 1]) / FPS;
             lastVelocity = Vector3.Distance(points[counter - 1], points[counter - 2]) / FPS;
             if (currentVelocity < (lastVelocity * 0.85))
             {
 
                 Vector3 throwingDirection = new Vector3();
-                for (int i =  0 ; i < counter/2; i++) {
-                    throwingDirection = throwingDirection + points[i];
+                int sum = 0;
+                for (int i = 0; i <= counter / 2; i++)
+                {
+                    throwingDirection = throwingDirection + (points[i] * i);
                 }
-                throwingDirection = throwingDirection / (counter/2);
+                for (int i = counter; i > counter / 2; i--)
+                {
+                    throwingDirection = throwingDirection + (points[i] * i);
+                }
+                sum = (counter * counter / 8);
+                if (counter % 2 == 1)
+                {
+                    sum += (counter * counter / 8);
+                }
+                else
+                {
+                    sum += (((counter - 1) * (counter - 1) / 8));
+                }
+                float throwingDistance = 0f;
+                for (int i = 0; i < counter; i++)
+                {
+                    throwingDistance += points[i].sqrMagnitude;
+                }
+                float throwingVelocity = SPEED_MULTIPLIER * (throwingDistance) / (counter);
+               
+
+                throwingDirection = throwingDirection / sum;
                 throwingDirection = throwingDirection * (-1);
-                float throwingVelocity = currentVelocity * SPEED_MULTIPLIER;
 
                 if (currentBall.GetComponent<Rigidbody>() == null)
                 {
@@ -112,10 +141,12 @@ public class RightHand_BallManager : MonoBehaviour {
                 throwing = false;
                 counter = 0;
 
-            } else {
+            }
+            else
+            {
                 counter++;
             }
-            
+
         }
 
         lastVelocity = currentVelocity;
