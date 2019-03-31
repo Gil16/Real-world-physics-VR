@@ -29,7 +29,7 @@ public class RightHand_BallManager : MonoBehaviour
 
     private const int LIMIT = 5000;
 
-    private const int SPEED_MULTIPLIER = 9;
+    private const float SPEED_MULTIPLIER = 7f;
 
     private const float FPS = 0.012f;
 
@@ -100,8 +100,8 @@ public class RightHand_BallManager : MonoBehaviour
             if (currentVelocity < (lastVelocity * 0.85))
             {
 
-                Vector3 throwingDirection = new Vector3();
-                int sum = 0;
+                Vector3 throwingDirection = Vector3.zero;
+                float sum = 0f;
                 for (int i = 0; i <= counter / 2; i++)
                 {
                     throwingDirection = throwingDirection + (points[i] * i);
@@ -110,29 +110,29 @@ public class RightHand_BallManager : MonoBehaviour
                 {
                     throwingDirection = throwingDirection + (points[i] * i);
                 }
-                sum = (counter * counter / 8);
+                sum = (counter * ((float)counter) / 8);
                 if (counter % 2 == 1)
                 {
-                    sum += (counter * counter / 8);
+                    sum += (counter * ((float)counter) / 8);
                 }
                 else
                 {
-                    sum += (((counter - 1) * (counter - 1) / 8));
+                    sum += (((counter - 1) * (((float)counter) - 1) / 8));
                 }
                 float throwingDistance = 0f;
                 for (int i = 0; i < counter; i++)
                 {
                     throwingDistance += points[i].sqrMagnitude;
                 }
-                float throwingVelocity = SPEED_MULTIPLIER * (throwingDistance) / (counter);
-               
-
+        
+                float throwingVelocity = SPEED_MULTIPLIER * ((throwingDistance) / (float)(counter));
                 throwingDirection = throwingDirection / sum;
                 throwingDirection = throwingDirection * (-1);
 
                 if (currentBall.GetComponent<Rigidbody>() == null)
                 {
                     currentBall.AddComponent<Rigidbody>();
+                    
                     currentBall.GetComponent<Rigidbody>().AddRelativeForce(throwingDirection * throwingVelocity, ForceMode.Force);
                     currentBall.GetComponent<Rigidbody>().useGravity = true;
                 }
