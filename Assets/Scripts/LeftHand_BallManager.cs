@@ -18,17 +18,22 @@ public class LeftHand_BallManager : MonoBehaviour
     public GameObject planePrefab;
 
 
+
     private static int counter = 0;
 
     private static int SPEED_COUNTER = 0;
 
+    private static int trailCounter = 0;
+
     private static bool throwing = false;
+
+    private static bool trailBool = false;
 
     private static Vector3 pointA = Vector3.positiveInfinity;
 
     private const int LIMIT = 5000;
 
-    private const float SPEED_MULTIPLIER = 50f; // magic number
+    private const float SPEED_MULTIPLIER = 50f;  // magic number
 
     // private const float FPS = 0.012f;
 
@@ -37,6 +42,8 @@ public class LeftHand_BallManager : MonoBehaviour
     private static Vector3[] points = new Vector3[LIMIT];
 
     private static float[] speeds = new float[LIMIT];
+
+    private static GameObject[] trail = new GameObject[LIMIT];
 
 
     // Use this for initialization
@@ -120,12 +127,17 @@ public class LeftHand_BallManager : MonoBehaviour
             averageVelocity = averageVelocity / SPEED_COUNTER;
 
             // Debug.Log("averageVelocity = " + averageVelocity);
-            //  Debug.Log("currentVelocity = " + currentVelocity);
+            // Debug.Log("currentVelocity = " + currentVelocity);
             //if (currentVelocity < (averageVelocity))  // (lastVelocity * 0.85)
             
-                if (speeds[SPEED_COUNTER] < averageVelocity && speeds[SPEED_COUNTER-1] < averageVelocity && speeds[SPEED_COUNTER-2] < averageVelocity
-                   && speeds[SPEED_COUNTER - 3] < averageVelocity && speeds[SPEED_COUNTER - 4] < averageVelocity && speeds[SPEED_COUNTER - 5] < averageVelocity)
+                if (speeds[SPEED_COUNTER] < averageVelocity && speeds[SPEED_COUNTER-1] < averageVelocity)
                 {
+                removeTrailDots();
+
+                for (int i = 0; i < counter; i++) {
+                //    Debug.Log("point[" + i + "] = " + points[i]);
+                }
+
                 Vector3 throwingDirection = Vector3.zero;
                 float sum = 0f;
                 for (int i = 0; i <= (counter / 2); i++)
@@ -134,11 +146,6 @@ public class LeftHand_BallManager : MonoBehaviour
 
                     throwingDirection = throwingDirection + (points[counter-i] * (i));
                 }
- /*               for (int i = counter; i > (counter / 2); i--)
-                {
-                    throwingDirection = throwingDirection + (points[i] * (counter - i));
-                }  */
-                
                 if (counter % 2 == 1)
                 {
                     sum = ((((counter - 1) * ((float)(counter-1))) / 8) + (((float)(counter-1)) / 4)) + (counter/2) + 1; // odd
@@ -148,30 +155,28 @@ public class LeftHand_BallManager : MonoBehaviour
                     sum = (((counter * ((float)counter)) / 8) + (((float)counter) / 4)) * 2; // even
                 }
                 throwingDirection = throwingDirection / sum;
-               // throwingDirection = throwingDirection * (-1);
-
                 if (currentBall.GetComponent<Rigidbody>() == null)
                 {
                     currentBall.AddComponent<Rigidbody>();                    
                     currentBall.GetComponent<Rigidbody>().AddRelativeForce(SPEED_MULTIPLIER * throwingDirection * averageVelocity, ForceMode.Force); // maybe use SPEED_MULTIPLIER
                     currentBall.GetComponent<Rigidbody>().useGravity = true;
 
+                    trailCounter = counter;
+                    // Points in space of the throw
+                    for (int i = 0; i < trailCounter; i++)
+                    {
+                        trail[i] = Instantiate(ballPrefab);
+                        trail[i].transform.localScale = new Vector3(0.01F, 0.01F, 0.01F);
+                        trail[i].transform.position = points[i];
+                        trail[i].GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+                        trail[i].transform.localRotation = Quaternion.identity;
+                    }
+                    trailBool = true;
                 }
                 currentBall.transform.parent = null;
                 throwing = false;
 
-                              // Points in space of the throw
-                              for (int i = 0; i < counter; i++)
-                              {
-                                  GameObject ballPerPoint;
-                                  ballPerPoint = Instantiate(ballPrefab);
-                                  ballPerPoint.transform.localScale = new Vector3(0.01F, 0.01F, 0.01F);
-                                  //    ballPerPoint.transform.parent = trackedObj.transform;
-                                  ballPerPoint.transform.position = points[i];
-                                  ballPerPoint.transform.localRotation = Quaternion.identity;
-                              }  
-
-                Debug.Log(counter); //ADDED TO CODE
+           //     Debug.Log(counter); //ADDED TO CODE
                 counter = 0;
                 SPEED_COUNTER = 0;
             }
@@ -198,7 +203,20 @@ public class LeftHand_BallManager : MonoBehaviour
     }
 
 
-
+    private void removeTrailDots()
+    {
+        if (!trailBool)
+            return;
+        else
+        {
+            for(int i = 0; i<= trailCounter; i++)
+            {
+                Destroy(trail[i]);
+            }
+            trailCounter = 0;
+            trailBool = false;
+        }
+    }
 
 
 
