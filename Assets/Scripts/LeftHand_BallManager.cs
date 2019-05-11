@@ -17,7 +17,7 @@ public class LeftHand_BallManager : MonoBehaviour
 
     public GameObject planePrefab;
 
-
+    private static bool Ball = true;
 
     private static int counter = 0;
 
@@ -172,6 +172,7 @@ public class LeftHand_BallManager : MonoBehaviour
                         trail[i].transform.localRotation = Quaternion.identity;
                     }
                     trailBool = true;
+                    Ball = false;
                 }
                 currentBall.transform.parent = null;
                 throwing = false;
@@ -199,13 +200,14 @@ public class LeftHand_BallManager : MonoBehaviour
             currentBall.transform.parent = trackedObj.transform;
             currentBall.transform.position = trackedObj.transform.position;
             currentBall.transform.localRotation = Quaternion.identity;
+            Ball = true;
         }
     }
 
 
     private void removeTrailDots()
     {
-        if (!trailBool)
+        if (!trailBool  || !Ball)     
             return;
         else
         {
