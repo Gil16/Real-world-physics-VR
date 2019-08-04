@@ -31,13 +31,15 @@ public class LeftHand_BallManager : MonoBehaviour
 
     private static Vector3 pointA = Vector3.positiveInfinity;
 
-    private const int LIMIT = 5000;
+    private const int LIMIT = 500;
 
     private const float SPEED_MULTIPLIER = 50f;  // magic number
 
     // private const float FPS = 0.012f;
 
     private const float MIN_SPEED = 2f;
+
+    private const float MAX_AVERAGE_VELOCITY = 3f;
 
     private static Vector3[] points = new Vector3[LIMIT];
 
@@ -104,17 +106,6 @@ public class LeftHand_BallManager : MonoBehaviour
         }
         else
         {
-            // Counter reached the points array limit, we copy 3 coords and continuing
-            /*         if (counter == LIMIT - 1)
-                     {
-                         points[0] = points[counter - 2];
-                         points[1] = points[counter - 1];
-                         points[2] = points[counter];
-                         counter = 2;
-                         return;
-                     }
-             */
-
 
             pointB = trackedObj.transform.position;
             points[counter] = pointB;
@@ -128,40 +119,18 @@ public class LeftHand_BallManager : MonoBehaviour
             }
             averageVelocity = averageVelocity / SPEED_COUNTER;
 
-            // Debug.Log("averageVelocity = " + averageVelocity);
-            // Debug.Log("currentVelocity = " + currentVelocity);
-            //if (currentVelocity < (averageVelocity))  // (lastVelocity * 0.85)
-
             if (speeds[SPEED_COUNTER] < averageVelocity && speeds[SPEED_COUNTER - 1] < averageVelocity)
             {
                 removeTrailDots();
 
-                //     for (int i = 0; i < counter; i++) {
-                //    Debug.Log("point[" + i + "] = " + points[i]);
-                //     }
-
                 Vector3 throwingDirection = Vector3.zero;
-                float sum = 0f;
-                /*for (int i = 1; i <= (counter / 2); i++)
-                {
-                    throwingDirection = throwingDirection + (points[i] * i);
-                    throwingDirection = throwingDirection + (points[counter-i] * (i));
-                }*/
-
-
                 for (int i = 1; i <= (counter / 2); i++)
                 {
                     throwingDirection += ((points[i] - points[i - 1]) * i);
                     throwingDirection += ((points[counter - i] - points[counter - i - 1]) * (i));
                 }
 
-                //             float sum_y = 0f;
-                //             for (int i=1; i<(counter/2); i++)
-                //            {
-                //                sum_y += (points[i].y - points[i - 1].y) * i;
-                //                sum_y += (points[counter-i].y - points[counter-i-1].y) * i;
-                //           }
-
+                float sum = 0f;
                 if (counter % 2 == 1)
                 {
                     sum = ((((counter - 1) * ((float)(counter - 1))) / 8) + (((float)(counter - 1)) / 4)) + (counter / 2) + 1; // odd
@@ -175,12 +144,9 @@ public class LeftHand_BallManager : MonoBehaviour
                 if (currentBall.GetComponent<Rigidbody>() == null)
                 {
                     currentBall.AddComponent<Rigidbody>();
-                    //  Debug.Log(new Vector3(throwingDirection.x, sum_y, throwingDirection.z));
-                    //currentBall.GetComponent<Rigidbody>().AddForceAtPosition(throwingDirection, trackedObj.transform.position, ForceMode.Impulse);
-                    //currentBall.GetComponent<Rigidbody>().AddRelativeForce( throwingDirection * averageVelocity, ForceMode.Impulse); // maybe use SPEED_MULTIPLIER   /////////////////////////
-                    // currentBall.GetComponent<Rigidbody>().AddForce(SPEED_MULTIPLIER * throwingDirection * averageVelocity, ForceMode.Force); // maybe use SPEED_MULTIPLIER   /////////////////////////
+                    averageVelocity = (averageVelocity > 3) ? MAX_AVERAGE_VELOCITY : averageVelocity;
                     currentBall.GetComponent<Rigidbody>().velocity = throwingDirection * averageVelocity * SPEED_MULTIPLIER; // maybe use SPEED_MULTIPLIER
-
+              //    Debug.Log(averageVelocity);
                     currentBall.GetComponent<Rigidbody>().useGravity = true;
 
                     trailCounter = counter;
@@ -196,10 +162,9 @@ public class LeftHand_BallManager : MonoBehaviour
                     trailBool = true;
                     Ball = false;
                 }
+
                 currentBall.transform.parent = null;
                 throwing = false;
-
-                //     Debug.Log(counter); //ADDED TO CODE
                 counter = 0;
                 SPEED_COUNTER = 0;
             }
