@@ -27,9 +27,9 @@ public class RespawnObject : MonoBehaviour {
         if (currentObject == null)
         {
             currentObject = Instantiate(objectPrefab);
-        //    currentObject.transform.parent = objectPrefab.transform;
+            currentObject.transform.parent = objectPrefab.transform;
             currentObject.transform.position = new Vector3(262.665f, 6.268f, 166.023f);
-            currentObject.transform.localScale = new Vector3(3f, 3f, 1f);
+            currentObject.transform.localScale = new Vector3(113.5f, 113.5f, 113.5f);
             currentObject.transform.localRotation = Quaternion.identity;
         }
     }
