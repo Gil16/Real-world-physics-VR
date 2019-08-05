@@ -5,7 +5,7 @@ using UnityEngine;
 public class MovingObject : MonoBehaviour {
 
     // Move object using accelerometer
-    private float speed = 5.0f;
+    private float speed = 20f;
 
     // Use this for initialization
     void Start () {

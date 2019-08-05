@@ -144,6 +144,8 @@ public class LeftHand_BallManager : MonoBehaviour
                 if (currentBall.GetComponent<Rigidbody>() == null)
                 {
                     currentBall.AddComponent<Rigidbody>();
+              //      currentBall.GetComponent<Rigidbody>().AddTorque(Vector3.forward);
+            //        currentBall.GetComponent<Rigidbody>().mass = 20f;
                     averageVelocity = (averageVelocity > 3) ? MAX_AVERAGE_VELOCITY : averageVelocity;
                     currentBall.GetComponent<Rigidbody>().velocity = throwingDirection * averageVelocity * SPEED_MULTIPLIER; // maybe use SPEED_MULTIPLIER
               //    Debug.Log(averageVelocity);
@@ -186,6 +188,7 @@ public class LeftHand_BallManager : MonoBehaviour
             currentBall = Instantiate(ballPrefab);
             currentBall.transform.parent = trackedObj.transform;
             currentBall.transform.position = trackedObj.transform.position;
+        //    currentBall.transform.localScale = new Vector3(0.55f, 0.55f, 0.55f);
             currentBall.transform.localRotation = Quaternion.identity;
             Ball = true;
         }

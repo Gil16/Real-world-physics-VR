@@ -5,7 +5,7 @@
       "app_key": "application.generated.unity.steamvr.exe",
       "launch_type": "url",
       "url": "steam://launch/",
-      "action_manifest_path": "C:\\Users\\gberesi\\Documents\\trackering\\actions.json",
+      "action_manifest_path": "C:\\Users\\gberesi\\Documents\\GitHub\\trackering\\actions.json",
       "strings": {
         "en_us": {
           "name": "SteamVR [Testing]"
