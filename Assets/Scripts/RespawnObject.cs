@@ -15,7 +15,7 @@ public class RespawnObject : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         createObject();
-        if (currentObject.transform.position.z < -30f)
+        if (currentObject.transform.position.z < 80f)
         {
             currentObject.transform.parent = null;
             Destroy(currentObject);
