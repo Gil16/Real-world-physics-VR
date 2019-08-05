@@ -170,6 +170,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   handPrefab: {fileID: 0}
-  displayHandByDefault: 1
+  displayHandByDefault: 0
   controllerPrefab: {fileID: 100002, guid: c455996f6e6b49d418895f41b5216202, type: 3}
   displayControllerByDefault: 1
