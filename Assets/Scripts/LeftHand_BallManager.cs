@@ -11,11 +11,20 @@ public class LeftHand_BallManager : MonoBehaviour
 
     public SteamVR_TrackedObject trackedObj;
 
-    private GameObject currentBall;
-
     public GameObject ballPrefab;
 
     public GameObject planePrefab;
+
+    public GameObject spikeBallPrefab;
+
+    public GameObject woodenBallPrefab;
+
+    public GameObject bombBallPrefab;
+
+
+    private GameObject[] ballTypes = new GameObject[BALL_TYPES_NUMBER];
+
+    private GameObject currentBall;
 
     private static bool Ball = true;
 
@@ -23,7 +32,9 @@ public class LeftHand_BallManager : MonoBehaviour
 
     private static int SPEED_COUNTER = 0;
 
- //   private static int trailCounter = 0;
+    //   private static int trailCounter = 0;
+
+    private const int BALL_TYPES_NUMBER = 3;
 
     private static bool throwing = false;
 
@@ -47,11 +58,14 @@ public class LeftHand_BallManager : MonoBehaviour
 
     private static GameObject[] trail = new GameObject[LIMIT];
 
-
+ //   private int ballTypeNumber = Random.Range(0,1);
 
     // Use this for initialization
     void Start()
     {
+        ballTypes[0] = spikeBallPrefab;
+        ballTypes[1] = woodenBallPrefab;
+        ballTypes[2] = bombBallPrefab;
     }
 
     // Update is called once per frame
@@ -192,12 +206,15 @@ public class LeftHand_BallManager : MonoBehaviour
     {
         if (currentBall == null)
         {
-            currentBall = Instantiate(ballPrefab);
+            int ballTypeNumber = Random.Range(0, 3);
+        //    Debug.Log(ballTypeNumber);
+            currentBall = Instantiate(ballTypes[ballTypeNumber]);           
             currentBall.transform.parent = trackedObj.transform;
             currentBall.transform.position = trackedObj.transform.position;
         //    currentBall.transform.localScale = new Vector3(0.55f, 0.55f, 0.55f);
             currentBall.transform.localRotation = Quaternion.identity;
             Ball = true;
+            
         }
     }
 
