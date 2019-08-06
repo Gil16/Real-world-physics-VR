@@ -153,7 +153,7 @@ public class RespawnObject : MonoBehaviour {
         public MovingElephant(GameObject elephant)
         {
             Hp = 150;
-            Score = 8;
+            Score = 6;
             Speed = 8f;
             StartingPosition = new Vector3(260f, 0.6f, 170.023f);
             Scale = new Vector3(100f, 100f, 100f);
@@ -173,6 +173,8 @@ public class RespawnObject : MonoBehaviour {
     public GameObject wallEPrefab;
 
     public GameObject elephantPrefab;
+
+    public GameObject explosionPrefab;
 
 
     private GameObject[] movingItems = new GameObject[NUMBER_OF_ITEMS];
@@ -239,9 +241,22 @@ public class RespawnObject : MonoBehaviour {
             || collision.gameObject.name == "WallE(Clone)"
             || collision.gameObject.name == "Elephant(Clone)")
         {
-            Destroy(collision.gameObject);
-            Destroy(gameObject);
-            object_exists = false;
+            if(gameObject.name == "BombBall(Clone)")
+            {
+                GameObject exp = Instantiate(explosionPrefab, collision.contacts[0].point, Quaternion.identity);
+                Destroy(collision.gameObject);
+                Destroy(gameObject);
+
+                object_exists = false;
+                Destroy(exp, 3);
+            }
+            else
+            {
+                Destroy(collision.gameObject);
+                Destroy(gameObject);
+                object_exists = false;
+            }
+            
         }
     }
 

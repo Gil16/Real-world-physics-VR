@@ -154,6 +154,7 @@ public class LeftHand_BallManager : MonoBehaviour
                     currentBall.GetComponent<TrailRenderer>().startWidth = 0.50f;
                     currentBall.GetComponent<TrailRenderer>().endWidth = 0.25f;
                     currentBall.GetComponent<TrailRenderer>().time = 0.5f;
+                    //currentBall.GetComponent<TrailRenderer>().setg = Color.red;
 
                     pointA = Vector3.positiveInfinity;
                 }

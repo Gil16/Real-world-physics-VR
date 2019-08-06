@@ -119,6 +119,8 @@ MonoBehaviour:
     type: 3}
   elephantPrefab: {fileID: 7063218817762387169, guid: 3d39c11200059d14084b912a40179b42,
     type: 3}
+  explosionPrefab: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b,
+    type: 3}
 --- !u!1001 &1497062271195947293
 PrefabInstance:
   m_ObjectHideFlags: 0
