@@ -26,39 +26,31 @@ public class LeftHand_BallManager : MonoBehaviour
 
     private GameObject currentBall;
 
-    private static bool Ball = true;
+
+    private const int BALL_TYPES_NUMBER = 3;
+
+    private const int LIMIT = 500;
+
+    private const float SPEED_MULTIPLIER = 50f;  
+
+    private const float MIN_SPEED = 2.3f;
+
+    private const float MAX_AVERAGE_VELOCITY = 3f;
+
 
     private static int counter = 0;
 
     private static int SPEED_COUNTER = 0;
 
-    //   private static int trailCounter = 0;
-
-    private const int BALL_TYPES_NUMBER = 3;
-
     private static bool throwing = false;
 
-    private static bool trailBool = false;
-
     private static Vector3 pointA = Vector3.positiveInfinity;
-
-    private const int LIMIT = 500;
-
-    private const float SPEED_MULTIPLIER = 50f;  // magic number
-
-    // private const float FPS = 0.012f;
-
-    private const float MIN_SPEED = 2f;
-
-    private const float MAX_AVERAGE_VELOCITY = 3f;
 
     private static Vector3[] points = new Vector3[LIMIT];
 
     private static float[] speeds = new float[LIMIT];
 
     private static GameObject[] trail = new GameObject[LIMIT];
-
- //   private int ballTypeNumber = Random.Range(0,1);
 
     // Use this for initialization
     void Start()
@@ -73,7 +65,10 @@ public class LeftHand_BallManager : MonoBehaviour
     {
         
         attachBall();
-        Fire();
+        if (!currentBall.GetComponent<Rigidbody>())
+        {
+            Fire();
+        }
         // use the points array to display the points 
         if (currentBall.transform.position.y < 1)
         {
@@ -85,7 +80,8 @@ public class LeftHand_BallManager : MonoBehaviour
     {
         Vector3 pointB;
         float currentVelocity;
-        if (throwing == false)
+        
+        if (!throwing)
         {
             // Initialazing coords
             if (pointA.Equals(Vector3.positiveInfinity))
@@ -107,23 +103,13 @@ public class LeftHand_BallManager : MonoBehaviour
                 points[counter++] = pointA;
                 points[counter++] = pointB;
             }
-
+            pointA = pointB;
         }
-        else if (throwing && counter < 15)
-        {
+        else if (throwing && counter > 11)
+        {        
             pointB = trackedObj.transform.position;
             points[counter] = pointB;
-            currentVelocity = Vector3.Distance(points[counter], points[counter - 1]) / Time.deltaTime;
-            speeds[SPEED_COUNTER] = currentVelocity;
-            counter++;
-            SPEED_COUNTER++;
-        }
-        else
-        {
-                     
-            pointB = trackedObj.transform.position;
-            points[counter] = pointB;
-            currentVelocity = Vector3.Distance(points[counter], points[counter - 1]) / Time.deltaTime;
+            currentVelocity = Vector3.Distance(pointB, points[counter - 1]) / Time.deltaTime;
             speeds[SPEED_COUNTER] = currentVelocity;
 
             float averageVelocity = 0;
@@ -133,10 +119,8 @@ public class LeftHand_BallManager : MonoBehaviour
             }
             averageVelocity = averageVelocity / SPEED_COUNTER;
 
-            if (speeds[SPEED_COUNTER] < averageVelocity && speeds[SPEED_COUNTER - 1] < averageVelocity)
+            if (currentVelocity < averageVelocity && speeds[SPEED_COUNTER - 1] < averageVelocity)
             {
-            //    removeTrailDots();
-
                 Vector3 throwingDirection = Vector3.zero;
                 for (int i = 1; i <= (counter / 2); i++)
                 {
@@ -154,6 +138,7 @@ public class LeftHand_BallManager : MonoBehaviour
                     sum = (((counter * ((float)counter)) / 8) + (((float)counter) / 4)) * 2; // even
                 }
                 throwingDirection = throwingDirection / sum;
+                pointA = pointB;
 
                 if (currentBall.GetComponent<Rigidbody>() == null)
                 {                   
@@ -171,25 +156,22 @@ public class LeftHand_BallManager : MonoBehaviour
                     currentBall.GetComponent<TrailRenderer>().endWidth = 0.25f;
                     currentBall.GetComponent<TrailRenderer>().time = 0.5f;
 
-
-                    //      trailCounter = 0; // counter;
-                    // Points in space of the throw
-                    //     for (int i = 0; i < trailCounter; i++)
-                    ///{
-                    //            trail[i] = Instantiate(ballPrefab);
-                    //           trail[i].transform.localScale = new Vector3(0.01F, 0.01F, 0.01F);
-                    //           trail[i].transform.position = points[i];
-                    //          trail[i].GetComponent<Renderer>().material.SetColor("_Color", Color.red);
-                    //          trail[i].transform.localRotation = Quaternion.identity;
-                    //      }
-                    //      trailBool = true;
-                    Ball = false;
+                    Debug.Log("averageVelocity = " + averageVelocity);
+                    Debug.Log("currentVelocity = " + currentVelocity);
+                    pointA = Vector3.positiveInfinity;
                 }
-           
+
+                for (int i = 0; i < SPEED_COUNTER; i++)
+                {
+                    Debug.Log("i = " + i + " speed: " + speeds[i]);
+                }
+
                 currentBall.transform.parent = null;
                 throwing = false;
                 counter = 0;
                 SPEED_COUNTER = 0;
+                averageVelocity = 0;
+
             }
             else
             {
@@ -198,7 +180,16 @@ public class LeftHand_BallManager : MonoBehaviour
             }
 
         }
-        pointA = pointB;
+        else
+        {
+            pointB = trackedObj.transform.position;
+            points[counter] = pointB;
+            currentVelocity = Vector3.Distance(pointB, points[counter - 1]) / Time.deltaTime;  // The distance between the last two points in the array
+            speeds[SPEED_COUNTER++] = currentVelocity;
+            counter++;
+            pointA = pointB;
+        }
+        
     }
 
 
@@ -206,34 +197,14 @@ public class LeftHand_BallManager : MonoBehaviour
     {
         if (currentBall == null)
         {
-            int ballTypeNumber = Random.Range(0, 3);
-        //    Debug.Log(ballTypeNumber);
-            currentBall = Instantiate(ballTypes[ballTypeNumber]);           
+            int rand = Random.Range(0, BALL_TYPES_NUMBER);
+            currentBall = Instantiate(ballTypes[rand]);
             currentBall.transform.parent = trackedObj.transform;
             currentBall.transform.position = trackedObj.transform.position;
-        //    currentBall.transform.localScale = new Vector3(0.55f, 0.55f, 0.55f);
+            //    currentBall.transform.localScale = new Vector3(0.55f, 0.55f, 0.55f);
             currentBall.transform.localRotation = Quaternion.identity;
-            Ball = true;
-            
         }
     }
-
-
-  /*  private void removeTrailDots()
-    {
-        if (!trailBool || !Ball)
-            return;
-        else
-        {
-            for (int i = 0; i <= trailCounter; i++)
-            {
-                Destroy(trail[i]);
-            }
-            trailCounter = 0;
-            trailBool = false;
-        }
-    }
-    */
 
 
     private void Awake()
