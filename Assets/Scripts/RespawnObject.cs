@@ -105,9 +105,9 @@ public class RespawnObject : MonoBehaviour {
             }
         }
 
-        public virtual bool offBounds()
+        public bool offBounds()
         {
-            return false;
+            return (CurrentObject.transform.position.z < 80f) ? true : false;
         }
     }
 
@@ -117,7 +117,7 @@ public class RespawnObject : MonoBehaviour {
         {
             Hp = 100;
             Score = 5;
-            Speed = 17f;
+            Speed = 10f;
             StartingPosition = new Vector3(254.665f, 1.02f, 170.023f);
             Scale = new Vector3(0.8f, 0.8f, 0.8f);
             Rotation = Quaternion.identity;
@@ -128,10 +128,43 @@ public class RespawnObject : MonoBehaviour {
             CurrentObject.transform.localRotation = Rotation;
         }
 
-        public override bool offBounds()
-        {
-            return (CurrentObject.transform.position.z < 80f) ? true : false;
+    }
+
+    class MovingWallE : MovingObject
+    {
+        public MovingWallE(GameObject wallE) {
+            Hp = 180;
+            Score = 10;
+            Speed = 5f;
+            StartingPosition = new Vector3(256.665f, 1.02f, 170.023f);
+            Scale = new Vector3(0.2f, 0.2f, 0.2f);
+            Rotation = Quaternion.Euler(0f,90f,0f);
+            CurrentObject = Instantiate(wallE);
+
+            CurrentObject.transform.position = StartingPosition;
+            CurrentObject.transform.localScale = Scale;
+            CurrentObject.transform.localRotation = Rotation;
         }
+
+    }
+
+    class MovingElephant : MovingObject
+    {
+        public MovingElephant(GameObject elephant)
+        {
+            Hp = 150;
+            Score = 8;
+            Speed = 8f;
+            StartingPosition = new Vector3(260f, 0.6f, 170.023f);
+            Scale = new Vector3(100f, 100f, 100f);
+            Rotation = Quaternion.Euler(0f, 180f, 0f);
+            CurrentObject = Instantiate(elephant);
+
+            CurrentObject.transform.position = StartingPosition;
+            CurrentObject.transform.localScale = Scale;
+            CurrentObject.transform.localRotation = Rotation;
+        }
+
     }
 
 
@@ -161,25 +194,27 @@ public class RespawnObject : MonoBehaviour {
 	void Update () {
         if (!object_exists)
         {
-            int rand = 0; // Random.Range(0,NUMBER_OF_ITEMS);
+            int rand = Random.Range(0,NUMBER_OF_ITEMS);
             switch (rand)
             {
                 case 0:
                     moving = new MovingFence(movingItems[0]);
                     break;
                 case 1:
-                    // moving = new MovingFence();
+                     moving = new MovingWallE(movingItems[1]);
                     break;
                 case 2:
-                    // moving = new MovingFence();
+                     moving = new MovingElephant(movingItems[2]);
                     break;
                 default:
-                    //moving = new MovingFence();
+                    moving = new MovingFence(movingItems[0]);
                     break;
             }
             object_exists = true;
 
         }
+
+        moving.CurrentObject.transform.Translate(Vector3.back * Time.deltaTime * moving.Speed, Space.World);
 
         if (object_exists && moving.offBounds())
         {

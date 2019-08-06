@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4415555325477624837}
   - component: {fileID: 8964226156277264736}
   - component: {fileID: 1574148627412754126}
-  - component: {fileID: 8205409042793892891}
   m_Layer: 0
   m_Name: Fence
   m_TagString: Untagged
@@ -153,18 +152,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8205409042793892891
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1159797047853188}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c809807eacf38ae418ac1e9339fc2189, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1182893277081328
 GameObject:
   m_ObjectHideFlags: 0
