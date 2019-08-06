@@ -105,7 +105,7 @@ public class LeftHand_BallManager : MonoBehaviour
             }
             pointA = pointB;
         }
-        else if (throwing && counter > 11)
+        else if (throwing && counter > 7)
         {        
             pointB = trackedObj.transform.position;
             points[counter] = pointB;
@@ -147,7 +147,6 @@ public class LeftHand_BallManager : MonoBehaviour
             //        currentBall.GetComponent<Rigidbody>().mass = 20f;
                     averageVelocity = (averageVelocity > 3) ? MAX_AVERAGE_VELOCITY : averageVelocity;
                     currentBall.GetComponent<Rigidbody>().velocity = throwingDirection * averageVelocity * SPEED_MULTIPLIER; // maybe use SPEED_MULTIPLIER
-              //    Debug.Log(averageVelocity);
                     currentBall.GetComponent<Rigidbody>().useGravity = true;
 
                     currentBall.AddComponent<TrailRenderer>();
@@ -156,14 +155,7 @@ public class LeftHand_BallManager : MonoBehaviour
                     currentBall.GetComponent<TrailRenderer>().endWidth = 0.25f;
                     currentBall.GetComponent<TrailRenderer>().time = 0.5f;
 
-                    Debug.Log("averageVelocity = " + averageVelocity);
-                    Debug.Log("currentVelocity = " + currentVelocity);
                     pointA = Vector3.positiveInfinity;
-                }
-
-                for (int i = 0; i < SPEED_COUNTER; i++)
-                {
-                    Debug.Log("i = " + i + " speed: " + speeds[i]);
                 }
 
                 currentBall.transform.parent = null;
@@ -201,7 +193,7 @@ public class LeftHand_BallManager : MonoBehaviour
             currentBall = Instantiate(ballTypes[rand]);
             currentBall.transform.parent = trackedObj.transform;
             currentBall.transform.position = trackedObj.transform.position;
-            //    currentBall.transform.localScale = new Vector3(0.55f, 0.55f, 0.55f);
+            currentBall.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
             currentBall.transform.localRotation = Quaternion.identity;
         }
     }

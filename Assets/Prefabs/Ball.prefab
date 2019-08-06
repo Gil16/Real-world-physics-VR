@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 135596875770338118}
   - component: {fileID: 23482654652959900}
   - component: {fileID: 114267969687692380}
-  - component: {fileID: 114851470317757294}
   - component: {fileID: 3834367007243344911}
+  - component: {fileID: 5187778389786649459}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Untagged
@@ -145,18 +145,6 @@ MonoBehaviour:
   handFollowTransform: 1
   highlightOnHover: 1
   hideHighlight: []
---- !u!114 &114851470317757294
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1182301489946316}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65e74daec84e5f94e80e3c14cd929e4e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3834367007243344911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,3 +161,21 @@ MonoBehaviour:
   displayHandByDefault: 0
   controllerPrefab: {fileID: 0}
   displayControllerByDefault: 0
+--- !u!114 &5187778389786649459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1182301489946316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4798b35a725617479c4f20722df02c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fencePrefab: {fileID: 1159797047853188, guid: 5b43a3ea634bfa041b23017502f34cfd,
+    type: 3}
+  wallEPrefab: {fileID: 1906508016798784, guid: 7eeceafdade405247affd70d386f5444,
+    type: 3}
+  elephantPrefab: {fileID: 7063218817762387169, guid: 3d39c11200059d14084b912a40179b42,
+    type: 3}

@@ -1,18 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!135 &5322134792539721117
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6787520490819279225}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &2712579994108036620
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -50,6 +37,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!135 &5322134792539721117
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6787520490819279225}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &9119642734906985524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,7 +101,7 @@ MonoBehaviour:
   handFollowTransform: 1
   highlightOnHover: 1
   hideHighlight: []
---- !u!114 &6496295572810239631
+--- !u!114 &9175822242870079122
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,9 +110,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 6787520490819279225}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65e74daec84e5f94e80e3c14cd929e4e, type: 3}
+  m_Script: {fileID: 11500000, guid: e4798b35a725617479c4f20722df02c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fencePrefab: {fileID: 1159797047853188, guid: 5b43a3ea634bfa041b23017502f34cfd,
+    type: 3}
+  wallEPrefab: {fileID: 1906508016798784, guid: 7eeceafdade405247affd70d386f5444,
+    type: 3}
+  elephantPrefab: {fileID: 7063218817762387169, guid: 3d39c11200059d14084b912a40179b42,
+    type: 3}
 --- !u!1001 &6787520490819182555
 PrefabInstance:
   m_ObjectHideFlags: 0
