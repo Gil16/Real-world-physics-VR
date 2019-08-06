@@ -150,11 +150,12 @@ public class LeftHand_BallManager : MonoBehaviour
                     currentBall.GetComponent<Rigidbody>().useGravity = true;
 
                     currentBall.AddComponent<TrailRenderer>();
-                    currentBall.GetComponent<TrailRenderer>().enabled = true;
-                    currentBall.GetComponent<TrailRenderer>().startWidth = 0.50f;
-                    currentBall.GetComponent<TrailRenderer>().endWidth = 0.25f;
+                    
+                    currentBall.GetComponent<TrailRenderer>().startWidth = 0.70f;
+                    currentBall.GetComponent<TrailRenderer>().endWidth = 0.05f;
                     currentBall.GetComponent<TrailRenderer>().time = 0.5f;
-                    //currentBall.GetComponent<TrailRenderer>().setg = Color.red;
+                    currentBall.GetComponent<TrailRenderer>().material.color = new Color(1.8f,0,0);
+                    currentBall.GetComponent<TrailRenderer>().enabled = true;
 
                     pointA = Vector3.positiveInfinity;
                 }
