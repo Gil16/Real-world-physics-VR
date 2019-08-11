@@ -121,8 +121,7 @@ MonoBehaviour:
     type: 3}
   explosionPrefab: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b,
     type: 3}
-  score_board: {fileID: 7331568026690289299, guid: df89ffb548048794a987f3fa35d7d995,
-    type: 3}
+  score_board: {fileID: 0}
 --- !u!1001 &1497062271195947293
 PrefabInstance:
   m_ObjectHideFlags: 0

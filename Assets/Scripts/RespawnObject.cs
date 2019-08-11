@@ -12,8 +12,6 @@ public class RespawnObject : MonoBehaviour {
 
     public GameObject explosionPrefab;
 
-    public TextMesh score_board;
-
 
     private GameObject[] movingItems = new GameObject[NUMBER_OF_ITEMS];
 
@@ -32,6 +30,10 @@ public class RespawnObject : MonoBehaviour {
     private static MovingObject moving = new MovingObject();
 
     private static int current_score = 0;
+
+    private static GameObject score_board;
+
+    private static bool score_board_flag = false;
 
 
 
@@ -204,7 +206,15 @@ public class RespawnObject : MonoBehaviour {
         movingItems[0] = fencePrefab;
         movingItems[1] = wallEPrefab;
         movingItems[2] = elephantPrefab;
-        score_board.text = "0";
+
+        if (!score_board_flag)
+        {
+            score_board = new GameObject();
+            score_board.AddComponent<TextMesh>();
+            score_board.transform.position = new Vector3(247.7f, 21.9f, 175.723f);
+            score_board.GetComponent<TextMesh>().text = "0";
+            score_board_flag = true;
+        }
     }
 	
 	// Update is called once per frameW
@@ -268,8 +278,9 @@ public class RespawnObject : MonoBehaviour {
         {
             Destroy(collision.gameObject);
             current_score = current_score + moving.Score;
-            score_board.text = (current_score).ToString();
-            Debug.Log(score_board.text);
+            score_board.GetComponent<TextMesh>().text = (current_score).ToString();
+            score_board.GetComponent<TextMesh>().fontSize = 35;
+         //   Debug.Log(score_board.text);
             object_exists = false;
         }
 
