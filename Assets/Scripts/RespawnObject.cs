@@ -12,13 +12,15 @@ public class RespawnObject : MonoBehaviour {
 
     public GameObject explosionPrefab;
 
+    public TextMesh score_board;
+
 
     private GameObject[] movingItems = new GameObject[NUMBER_OF_ITEMS];
 
 
     private const int NUMBER_OF_ITEMS = 3;
 
-    private const int BOMB_BALL_DAMAGE = 100;
+    private const int BOMB_BALL_DAMAGE = 200;
 
     private const int WOODEN_BALL_DAMAGE = 100;
 
@@ -28,6 +30,8 @@ public class RespawnObject : MonoBehaviour {
     private static bool object_exists = false;
 
     private static MovingObject moving = new MovingObject();
+
+    private static int current_score = 0;
 
 
 
@@ -200,6 +204,7 @@ public class RespawnObject : MonoBehaviour {
         movingItems[0] = fencePrefab;
         movingItems[1] = wallEPrefab;
         movingItems[2] = elephantPrefab;
+        score_board.text = "0";
     }
 	
 	// Update is called once per frameW
@@ -207,7 +212,7 @@ public class RespawnObject : MonoBehaviour {
         if (!object_exists)
         {
             int rand = Random.Range(0,NUMBER_OF_ITEMS);
-            switch (2)
+            switch (rand)
             {
                 case 0:
                     moving = new MovingFence(movingItems[0]);
@@ -243,37 +248,31 @@ public class RespawnObject : MonoBehaviour {
         {
             Destroy(gameObject);
         }
-        else if (collision.gameObject.name == "SpikeBall(Clone)"
-            || collision.gameObject.name == "WoodenBall(Clone)"
-            || collision.gameObject.name == "bombBall(Clone)"
-            || collision.gameObject.name == "Cube(Clone)"
-            || collision.gameObject.name == "Fence(Clone)"
-            || collision.gameObject.name == "WallE(Clone)"
-            || collision.gameObject.name == "Elephant(Clone)")
+        else if (gameObject.name == "BombBall(Clone)")
         {
-            if(gameObject.name == "BombBall(Clone)")
-            {
-                GameObject exp = Instantiate(explosionPrefab, collision.contacts[0].point, Quaternion.identity);
-                moving.Hp = moving.Hp - BOMB_BALL_DAMAGE;
-                Destroy(gameObject);
-
-                if (moving.Hp <= 0)
-                {
-                    Destroy(collision.gameObject);
-                    //TODO : add score
-                    object_exists = false;
-                }
-
-                Destroy(exp, 3);
-            }
-            else
-            {
-                Destroy(collision.gameObject);
-                Destroy(gameObject);
-                object_exists = false;
-            }
-            
+            GameObject exp = Instantiate(explosionPrefab, collision.contacts[0].point, Quaternion.identity);
+            moving.Hp = moving.Hp - BOMB_BALL_DAMAGE;
+            Destroy(exp, 3);
         }
+        else if (gameObject.name == "WoodenBall(Clone)")
+        {
+            moving.Hp = moving.Hp - WOODEN_BALL_DAMAGE;
+        }
+        else if (gameObject.name == "SpikeBall(Clone)")
+        {
+            moving.Hp = moving.Hp - SPIKE_BALL_DAMAGE;
+        }
+
+        Destroy(gameObject);
+        if (moving.Hp <= 0)
+        {
+            Destroy(collision.gameObject);
+            current_score = current_score + moving.Score;
+            score_board.text = (current_score).ToString();
+            Debug.Log(score_board.text);
+            object_exists = false;
+        }
+
     }
 
 }

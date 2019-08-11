@@ -257,7 +257,7 @@ public class LeftHand_BallManager : MonoBehaviour
         if (!ball.Ball_Object || !ball_exists)
         {
             int rand = Random.Range(0, BALL_TYPES_NUMBER);
-            switch (2)
+            switch (rand)
             {
                 case 0:
                     ball = new SpikeBall(ballTypes[0]);

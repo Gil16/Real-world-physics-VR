@@ -101,7 +101,7 @@ MonoBehaviour:
   handFollowTransform: 1
   highlightOnHover: 1
   hideHighlight: []
---- !u!114 &9175822242870079122
+--- !u!114 &848863172708867651
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -120,6 +120,8 @@ MonoBehaviour:
   elephantPrefab: {fileID: 7063218817762387169, guid: 3d39c11200059d14084b912a40179b42,
     type: 3}
   explosionPrefab: {fileID: 1000011797152326, guid: acf39d9f4addf294d93fa56fa373961b,
+    type: 3}
+  score_board: {fileID: 7331568026690289299, guid: df89ffb548048794a987f3fa35d7d995,
     type: 3}
 --- !u!1001 &6787520490819182555
 PrefabInstance:
