@@ -1,9 +1,9 @@
 fileFormatVersion: 2
 guid: 7e15121f5f042ed46aba81406403f2d2
-timeCreated: 1506938147
+timeCreated: 1498644481
 licenseType: Store
 ModelImporter:
-  serializedVersion: 22
+  serializedVersion: 21
   fileIDToRecycleName:
     100000: LowMan
     100002: //RootNode
@@ -129,23 +129,14 @@ ModelImporter:
     400118: LowManSpine
     400120: LowManSpine1
     400122: LowManSpine2
-    2300000: LowMan
-    3300000: LowMan
     4300000: LowMan
     7400000: Take 001
     9500000: //RootNode
     13700000: LowMan
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: MazeLowMan
-    second: {fileID: 2100000, guid: d695529081158d44f84e349bd501fde6, type: 2}
   materials:
     importMaterials: 1
     materialName: 1
     materialSearch: 2
-    materialLocation: 0
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -158,7 +149,6 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
-    importAnimatedCustomProperties: 0
     animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -367,27 +357,19 @@ ModelImporter:
         value: {x: 0, y: 0, z: 0}
         length: 0
         modified: 0
-    - boneName: LowManSpine2
-      humanName: UpperChest
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
     skeleton:
-    - name: LowMan(Clone)
+    - name: MazeLowMan(Clone)
       parentName: 
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: LowMan
-      parentName: LowMan(Clone)
-      position: {x: -0, y: 0, z: 0}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
+      parentName: MazeLowMan(Clone)
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: LowManSkeleton
-      parentName: LowMan(Clone)
+      parentName: MazeLowMan(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
@@ -471,11 +453,6 @@ ModelImporter:
       position: {x: -0.00000007427846, y: -5.857409e-10, z: 0.2602429}
       rotation: {x: -0.3669121, y: 0.12637624, z: 0.011347044, w: 0.92156166}
       scale: {x: 1.0000001, y: 1.0000001, z: 1}
-    - name: LowManLeftHandThumb1
-      parentName: LowManLeftHand
-      position: {x: 0.00000013602212, y: 0.000000005246613, z: 0.0750325}
-      rotation: {x: 0.27076066, y: -0.08001617, z: 0.43018422, w: 0.8574542}
-      scale: {x: 1.0000001, y: 1, z: 1}
     - name: LowManLeftHandMiddle1
       parentName: LowManLeftHand
       position: {x: -0.022419065, y: -0.06474134, z: 0.06929219}
@@ -485,6 +462,21 @@ ModelImporter:
       parentName: LowManLeftHandMiddle1
       position: {x: -0.000000022334639, y: -0.0000000018020321, z: 0.09924527}
       rotation: {x: -0.5562296, y: 0.39916337, z: 0.43658754, w: 0.58366823}
+      scale: {x: 1, y: 1, z: 1}
+    - name: LowManLeftHandThumb1
+      parentName: LowManLeftHand
+      position: {x: 0.00000013602212, y: 0.000000005246613, z: 0.0750325}
+      rotation: {x: 0.27076066, y: -0.08001617, z: 0.43018422, w: 0.8574542}
+      scale: {x: 1.0000001, y: 1, z: 1}
+    - name: LowManNeck
+      parentName: LowManSpine2
+      position: {x: 0.097118974, y: -8.97916e-17, z: 0.11041458}
+      rotation: {x: 0, y: 0.352939, z: -0, w: 0.93564636}
+      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000001}
+    - name: LowManHead
+      parentName: LowManNeck
+      position: {x: 7.249219e-17, y: -2.0776512e-17, z: 0.103392325}
+      rotation: {x: 0.7071068, y: -3.9252314e-17, z: 3.9252314e-17, w: 0.7071068}
       scale: {x: 1, y: 1, z: 1}
     - name: LowManRightShoulder
       parentName: LowManSpine2
@@ -506,11 +498,6 @@ ModelImporter:
       position: {x: -0.00000007427846, y: 5.857397e-10, z: 0.2602429}
       rotation: {x: 0.36691338, y: 0.13058148, z: -0.012872, w: 0.9209546}
       scale: {x: 1, y: 1, z: 1}
-    - name: LowManRightHandThumb1
-      parentName: LowManRightHand
-      position: {x: 0.000000020555484, y: 0.000000021816362, z: 0.075032525}
-      rotation: {x: -0.27984208, y: 0.03744787, z: -0.042803537, w: 0.95836}
-      scale: {x: 1.0000001, y: 1.0000002, z: 1.0000002}
     - name: LowManRightHandMiddle1
       parentName: LowManRightHand
       position: {x: -0.022419062, y: 0.06474137, z: 0.06929222}
@@ -521,16 +508,11 @@ ModelImporter:
       position: {x: -0.00000008520796, y: -9.627373e-10, z: 0.09924526}
       rotation: {x: 0.39916646, y: -0.556232, z: 0.58366615, w: 0.43658456}
       scale: {x: 1.0000004, y: 1.0000004, z: 1.0000004}
-    - name: LowManNeck
-      parentName: LowManSpine2
-      position: {x: 0.097118974, y: -8.97916e-17, z: 0.11041458}
-      rotation: {x: 0, y: 0.352939, z: -0, w: 0.93564636}
-      scale: {x: 1.0000002, y: 1.0000001, z: 1.0000001}
-    - name: LowManHead
-      parentName: LowManNeck
-      position: {x: 7.249219e-17, y: -2.0776512e-17, z: 0.103392325}
-      rotation: {x: 0.7071068, y: -3.9252314e-17, z: 3.9252314e-17, w: 0.7071068}
-      scale: {x: 1, y: 1, z: 1}
+    - name: LowManRightHandThumb1
+      parentName: LowManRightHand
+      position: {x: 0.000000020555484, y: 0.000000021816362, z: 0.075032525}
+      rotation: {x: -0.27984208, y: 0.03744787, z: -0.042803537, w: 0.95836}
+      scale: {x: 1.0000001, y: 1.0000002, z: 1.0000002}
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
@@ -541,7 +523,7 @@ ModelImporter:
     rootMotionBoneName: 
     rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
-    hasExtraRoot: 1
+    hasExtraRoot: 0
     skeletonHasParents: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 3

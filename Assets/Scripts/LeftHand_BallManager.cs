@@ -24,16 +24,16 @@ public class LeftHand_BallManager : MonoBehaviour
 
     private GameObject[] ballTypes = new GameObject[BALL_TYPES_NUMBER];
 
-    private GameObject currentBall;
+ //   private GameObject currentBall;
 
 
     private const int BALL_TYPES_NUMBER = 3;
 
     private const int LIMIT = 500;
 
-    private const float SPEED_MULTIPLIER = 50f;  
+    private const float SPEED_MULTIPLIER = 75f;  
 
-    private const float MIN_SPEED = 2.3f;
+    private const float MIN_SPEED = 4.3f;
 
     private const float MAX_AVERAGE_VELOCITY = 3f;
 
@@ -52,6 +52,71 @@ public class LeftHand_BallManager : MonoBehaviour
 
     private static GameObject[] trail = new GameObject[LIMIT];
 
+    private static Ball ball = new Ball();
+
+    private static bool ball_exists = false;
+
+
+
+    public class Ball
+    {
+        int damage;
+        float speed;
+        Vector3 scale;
+        GameObject ball_object;
+
+        public int Damage { get => damage; set => damage = value; }
+        public float Speed { get => speed; set => speed = value; }
+        public Vector3 Scale { get => scale; set => scale = value; }
+        public GameObject Ball_Object { get => ball_object; set => ball_object = value; }
+    }
+
+    class SpikeBall : Ball
+    {
+        public SpikeBall(GameObject spikeBall)
+        {
+            Damage = 150;
+            Speed = 3f;
+            Scale = new Vector3(0.2f, 0.2f, 0.2f);
+            Ball_Object = Instantiate(spikeBall);
+
+            Ball_Object.transform.localScale = Scale;
+            Ball_Object.transform.localRotation = Quaternion.identity;
+        }
+
+    }
+
+    class WoodenBall : Ball
+    {
+        public WoodenBall(GameObject spikeBall)
+        {
+            Damage = 100;
+            Speed = 3f;
+            Scale = new Vector3(0.2f, 0.2f, 0.2f);
+            Ball_Object = Instantiate(spikeBall);
+
+            Ball_Object.transform.localScale = Scale;
+            Ball_Object.transform.localRotation = Quaternion.identity;
+        }
+
+    }
+
+    class BombBall : Ball
+    {
+        public BombBall(GameObject spikeBall)
+        {
+            Damage = 200;
+            Speed = 3f;
+            Scale = new Vector3(0.2f, 0.2f, 0.2f);
+            Ball_Object = Instantiate(spikeBall);
+
+            Ball_Object.transform.localScale = Scale;
+            Ball_Object.transform.localRotation = Quaternion.identity;
+        }
+
+    }
+
+
     // Use this for initialization
     void Start()
     {
@@ -65,14 +130,15 @@ public class LeftHand_BallManager : MonoBehaviour
     {
         
         attachBall();
-        if (!currentBall.GetComponent<Rigidbody>())
+        if (!ball.Ball_Object.GetComponent<Rigidbody>())
         {
             Fire();
         }
         // use the points array to display the points 
-        if (currentBall.transform.position.y < 1)
+        if (ball.Ball_Object.transform.position.y < 0.08)
         {
-            Destroy(currentBall);
+            ball_exists = false;
+            Destroy(ball.Ball_Object);
         }
     }
 
@@ -140,27 +206,26 @@ public class LeftHand_BallManager : MonoBehaviour
                 throwingDirection = throwingDirection / sum;
                 pointA = pointB;
 
-                if (currentBall.GetComponent<Rigidbody>() == null)
-                {                   
-                    currentBall.AddComponent<Rigidbody>();
-                   currentBall.GetComponent<Rigidbody>().AddTorque(Vector3.forward);
-            //        currentBall.GetComponent<Rigidbody>().mass = 20f;
+                if (ball.Ball_Object.GetComponent<Rigidbody>() == null)
+                {
+                    ball.Ball_Object.AddComponent<Rigidbody>();
                     averageVelocity = (averageVelocity > 3) ? MAX_AVERAGE_VELOCITY : averageVelocity;
-                    currentBall.GetComponent<Rigidbody>().velocity = throwingDirection * averageVelocity * SPEED_MULTIPLIER; // maybe use SPEED_MULTIPLIER
-                    currentBall.GetComponent<Rigidbody>().useGravity = true;
+                    ball.Ball_Object.GetComponent<Rigidbody>().velocity = throwingDirection * averageVelocity * SPEED_MULTIPLIER; // maybe use SPEED_MULTIPLIER
+                    ball.Ball_Object.GetComponent<Rigidbody>().useGravity = true;
 
-                    currentBall.AddComponent<TrailRenderer>();
-                    
-                    currentBall.GetComponent<TrailRenderer>().startWidth = 0.70f;
-                    currentBall.GetComponent<TrailRenderer>().endWidth = 0.05f;
-                    currentBall.GetComponent<TrailRenderer>().time = 0.5f;
-                    currentBall.GetComponent<TrailRenderer>().material.color = new Color(1.8f,0,0);
-                    currentBall.GetComponent<TrailRenderer>().enabled = true;
+                    ball.Ball_Object.GetComponent<Rigidbody>().AddTorque(Vector3.forward);
+
+                    ball.Ball_Object.AddComponent<TrailRenderer>();
+                    ball.Ball_Object.GetComponent<TrailRenderer>().startWidth = 0.70f;
+                    ball.Ball_Object.GetComponent<TrailRenderer>().endWidth = 0.05f;
+                    ball.Ball_Object.GetComponent<TrailRenderer>().time = 0.5f;
+                    ball.Ball_Object.GetComponent<TrailRenderer>().material.color = new Color(1.8f,0,0);
+                    ball.Ball_Object.GetComponent<TrailRenderer>().enabled = true;
 
                     pointA = Vector3.positiveInfinity;
                 }
 
-                currentBall.transform.parent = null;
+                ball.Ball_Object.transform.parent = null;
                 throwing = false;
                 counter = 0;
                 SPEED_COUNTER = 0;
@@ -189,14 +254,29 @@ public class LeftHand_BallManager : MonoBehaviour
 
     public void attachBall()
     {
-        if (currentBall == null)
+        if (!ball.Ball_Object || !ball_exists)
         {
             int rand = Random.Range(0, BALL_TYPES_NUMBER);
-            currentBall = Instantiate(ballTypes[rand]);
-            currentBall.transform.parent = trackedObj.transform;
-            currentBall.transform.position = trackedObj.transform.position;
-            currentBall.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
-            currentBall.transform.localRotation = Quaternion.identity;
+            switch (2)
+            {
+                case 0:
+                    ball = new SpikeBall(ballTypes[0]);
+                    break;
+                case 1:
+                    ball = new WoodenBall(ballTypes[1]);
+                    break;
+                case 2:
+                    ball = new BombBall(ballTypes[2]);
+                    break;
+                default:
+                    ball = new WoodenBall(ballTypes[0]);
+                    break;
+            }
+
+            ball.Ball_Object.transform.parent = trackedObj.transform;
+            ball.Ball_Object.transform.position = trackedObj.transform.position;
+
+            ball_exists = true;
         }
     }
 

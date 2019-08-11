@@ -4,7 +4,34 @@ using UnityEngine;
 
 public class RespawnObject : MonoBehaviour {
 
-    protected class MovingObject
+    public GameObject fencePrefab;
+
+    public GameObject wallEPrefab;
+
+    public GameObject elephantPrefab;
+
+    public GameObject explosionPrefab;
+
+
+    private GameObject[] movingItems = new GameObject[NUMBER_OF_ITEMS];
+
+
+    private const int NUMBER_OF_ITEMS = 3;
+
+    private const int BOMB_BALL_DAMAGE = 100;
+
+    private const int WOODEN_BALL_DAMAGE = 100;
+
+    private const int SPIKE_BALL_DAMAGE = 150;
+
+
+    private static bool object_exists = false;
+
+    private static MovingObject moving = new MovingObject();
+
+
+
+    public class MovingObject
     {
         int hp;
         int score;
@@ -168,23 +195,6 @@ public class RespawnObject : MonoBehaviour {
     }
 
 
-    public GameObject fencePrefab;
-
-    public GameObject wallEPrefab;
-
-    public GameObject elephantPrefab;
-
-    public GameObject explosionPrefab;
-
-
-    private GameObject[] movingItems = new GameObject[NUMBER_OF_ITEMS];
-
-    private const int NUMBER_OF_ITEMS = 3;
-
-    private static bool object_exists = false;
-
-    private static MovingObject moving = new MovingObject();
-
     // Use this for initialization
     void Start () {
         movingItems[0] = fencePrefab;
@@ -197,7 +207,7 @@ public class RespawnObject : MonoBehaviour {
         if (!object_exists)
         {
             int rand = Random.Range(0,NUMBER_OF_ITEMS);
-            switch (rand)
+            switch (2)
             {
                 case 0:
                     moving = new MovingFence(movingItems[0]);
@@ -244,10 +254,16 @@ public class RespawnObject : MonoBehaviour {
             if(gameObject.name == "BombBall(Clone)")
             {
                 GameObject exp = Instantiate(explosionPrefab, collision.contacts[0].point, Quaternion.identity);
-                Destroy(collision.gameObject);
+                moving.Hp = moving.Hp - BOMB_BALL_DAMAGE;
                 Destroy(gameObject);
 
-                object_exists = false;
+                if (moving.Hp <= 0)
+                {
+                    Destroy(collision.gameObject);
+                    //TODO : add score
+                    object_exists = false;
+                }
+
                 Destroy(exp, 3);
             }
             else
