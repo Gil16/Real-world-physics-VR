@@ -56,7 +56,11 @@ public class LeftHand_BallManager : MonoBehaviour
 
     private static bool ball_exists = false;
 
+    private static bool left = false;
 
+    private static bool right = false;
+
+    private static int frame_count = 0;
 
     public class Ball
     {
@@ -134,6 +138,10 @@ public class LeftHand_BallManager : MonoBehaviour
         {
             Fire();
         }
+        else
+        {
+            MoveBall();
+        }
         // use the points array to display the points 
         if (ball.Ball_Object.transform.position.y < 0.08)
         {
@@ -208,7 +216,12 @@ public class LeftHand_BallManager : MonoBehaviour
 
                 if (ball.Ball_Object.GetComponent<Rigidbody>() == null)
                 {
+                    frame_count = 0;
                     ball.Ball_Object.AddComponent<Rigidbody>();
+
+
+                   
+
                     averageVelocity = (averageVelocity > 3) ? MAX_AVERAGE_VELOCITY : averageVelocity;
                     ball.Ball_Object.GetComponent<Rigidbody>().velocity = throwingDirection * averageVelocity * SPEED_MULTIPLIER; // maybe use SPEED_MULTIPLIER
                     ball.Ball_Object.GetComponent<Rigidbody>().useGravity = true;
@@ -216,7 +229,7 @@ public class LeftHand_BallManager : MonoBehaviour
                     ball.Ball_Object.GetComponent<Rigidbody>().AddTorque(Vector3.forward);
 
                     ball.Ball_Object.AddComponent<TrailRenderer>();
-                    ball.Ball_Object.GetComponent<TrailRenderer>().startWidth = 0.70f;
+                    ball.Ball_Object.GetComponent<TrailRenderer>().startWidth = 0.20f;
                     ball.Ball_Object.GetComponent<TrailRenderer>().endWidth = 0.05f;
                     ball.Ball_Object.GetComponent<TrailRenderer>().time = 0.5f;
                     ball.Ball_Object.GetComponent<TrailRenderer>().material.color = new Color(1.8f,0,0);
@@ -280,6 +293,12 @@ public class LeftHand_BallManager : MonoBehaviour
         }
     }
 
+
+    private void MoveBall()
+    {
+        frame_count++;          
+        ball.Ball_Object.transform.position = ball.Ball_Object.transform.position + new Vector3(-0.001f,0f,0f)*frame_count;
+    }
 
     private void Awake()
     {
