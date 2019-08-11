@@ -211,8 +211,9 @@ public class RespawnObject : MonoBehaviour {
         {
             score_board = new GameObject();
             score_board.AddComponent<TextMesh>();
-            score_board.transform.position = new Vector3(252.4f, 21f, 175.723f);
+            score_board.transform.position = new Vector3(252.8f, 21.9f, 175.723f);
             score_board.GetComponent<TextMesh>().text = "0";
+            score_board.GetComponent<TextMesh>().fontSize = 20;
             score_board_flag = true;
         }
     }
@@ -279,8 +280,6 @@ public class RespawnObject : MonoBehaviour {
             Destroy(collision.gameObject);
             current_score = current_score + moving.Score;
             score_board.GetComponent<TextMesh>().text = (current_score).ToString();
-            score_board.GetComponent<TextMesh>().fontSize = 35;
-         //   Debug.Log(score_board.text);
             object_exists = false;
         }
 
