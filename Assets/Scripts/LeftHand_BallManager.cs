@@ -24,8 +24,6 @@ public class LeftHand_BallManager : MonoBehaviour
 
     private GameObject[] ballTypes = new GameObject[BALL_TYPES_NUMBER];
 
- //   private GameObject currentBall;
-
 
     private const int BALL_TYPES_NUMBER = 3;
 
@@ -56,11 +54,14 @@ public class LeftHand_BallManager : MonoBehaviour
 
     private static bool ball_exists = false;
 
-    private static bool left = false;
-
-    private static bool right = false;
-
     private static int frame_count = 0;
+
+    private static bool wind_on = false;
+
+    private static bool right_wind = false;
+
+  //  private static float the_time;
+
 
     public class Ball
     {
@@ -127,12 +128,13 @@ public class LeftHand_BallManager : MonoBehaviour
         ballTypes[0] = spikeBallPrefab;
         ballTypes[1] = woodenBallPrefab;
         ballTypes[2] = bombBallPrefab;
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
         attachBall();
         if (!ball.Ball_Object.GetComponent<Rigidbody>())
         {
@@ -140,8 +142,19 @@ public class LeftHand_BallManager : MonoBehaviour
         }
         else
         {
-            MoveBall();
-        }
+            if((Mathf.Floor(Time.time) % 25) == 0)
+            {
+                wind_on = !wind_on;
+                if (wind_on)
+                {
+                    right_wind = !right_wind;
+                }
+            }
+            if (wind_on)
+            {
+                MoveBall();
+            }
+        }                                                                                                                                                                                                                                                                                                                  
         // use the points array to display the points 
         if (ball.Ball_Object.transform.position.y < 0.08)
         {
@@ -217,10 +230,8 @@ public class LeftHand_BallManager : MonoBehaviour
                 if (ball.Ball_Object.GetComponent<Rigidbody>() == null)
                 {
                     frame_count = 0;
+
                     ball.Ball_Object.AddComponent<Rigidbody>();
-
-
-                   
 
                     averageVelocity = (averageVelocity > 3) ? MAX_AVERAGE_VELOCITY : averageVelocity;
                     ball.Ball_Object.GetComponent<Rigidbody>().velocity = throwingDirection * averageVelocity * SPEED_MULTIPLIER; // maybe use SPEED_MULTIPLIER
@@ -296,8 +307,16 @@ public class LeftHand_BallManager : MonoBehaviour
 
     private void MoveBall()
     {
-        frame_count++;          
-        ball.Ball_Object.transform.position = ball.Ball_Object.transform.position + new Vector3(-0.001f,0f,0f)*frame_count;
+        frame_count++;
+        if (right_wind)
+        {
+            ball.Ball_Object.transform.position = ball.Ball_Object.transform.position + new Vector3(0.001f, 0f, 0f) * frame_count;
+        }
+        else
+        {
+            ball.Ball_Object.transform.position = ball.Ball_Object.transform.position + new Vector3(-0.001f, 0f, 0f) * frame_count;
+        }
+        
     }
 
     private void Awake()
