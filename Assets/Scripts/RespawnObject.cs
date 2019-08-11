@@ -211,7 +211,7 @@ public class RespawnObject : MonoBehaviour {
         {
             score_board = new GameObject();
             score_board.AddComponent<TextMesh>();
-            score_board.transform.position = new Vector3(247.7f, 21.9f, 175.723f);
+            score_board.transform.position = new Vector3(252.4f, 21f, 175.723f);
             score_board.GetComponent<TextMesh>().text = "0";
             score_board_flag = true;
         }
