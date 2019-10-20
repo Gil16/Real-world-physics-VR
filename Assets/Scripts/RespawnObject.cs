@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class RespawnObject : MonoBehaviour {
 
     public GameObject fencePrefab;
@@ -25,7 +26,11 @@ public class RespawnObject : MonoBehaviour {
     private const int SPIKE_BALL_DAMAGE = 150;
 
 
+    private static bool start_game = false;
+
     private static bool object_exists = false;
+
+    private static GameObject startGameButton;
 
     private static MovingObject moving = new MovingObject();
 
@@ -207,6 +212,13 @@ public class RespawnObject : MonoBehaviour {
         movingItems[1] = wallEPrefab;
         movingItems[2] = elephantPrefab;
 
+        // start the game
+        if (!start_game)
+        {
+            start_game = true;
+            initGame();
+        }
+
         if (!score_board_flag)
         {
             score_board = new GameObject();
@@ -216,45 +228,69 @@ public class RespawnObject : MonoBehaviour {
             score_board.GetComponent<TextMesh>().fontSize = 20;
             score_board_flag = true;
         }
+
+        
     }
 	
 	// Update is called once per frameW
 	void Update () {
-        if (!object_exists)
+        if (!startGameButton)
         {
-            int rand = Random.Range(0,NUMBER_OF_ITEMS);
-            switch (rand)
+            if (!object_exists)
             {
-                case 0:
-                    moving = new MovingFence(movingItems[0]);
-                    break;
-                case 1:
-                     moving = new MovingWallE(movingItems[1]);
-                    break;
-                case 2:
-                     moving = new MovingElephant(movingItems[2]);
-                    break;
-                default:
-                    moving = new MovingFence(movingItems[0]);
-                    break;
+                int rand = Random.Range(0, NUMBER_OF_ITEMS);
+                switch (rand)
+                {
+                    case 0:
+                        moving = new MovingFence(movingItems[0]);
+                        break;
+                    case 1:
+                        moving = new MovingWallE(movingItems[1]);
+                        break;
+                    case 2:
+                        moving = new MovingElephant(movingItems[2]);
+                        break;
+                    default:
+                        moving = new MovingFence(movingItems[0]);
+                        break;
+                }
+                object_exists = true;
             }
-            object_exists = true;
 
-        }
+            moving.CurrentObject.transform.Translate(Vector3.back * Time.deltaTime * moving.Speed, Space.World);
 
-        moving.CurrentObject.transform.Translate(Vector3.back * Time.deltaTime * moving.Speed, Space.World);
-
-        if (object_exists && moving.offBounds())
-        {
-            moving.CurrentObject.transform.parent = null;
-            Destroy(moving.CurrentObject);
-            object_exists = false;
+            if (object_exists && moving.offBounds())
+            {
+                moving.CurrentObject.transform.parent = null;
+                Destroy(moving.CurrentObject);
+                object_exists = false;
+            }
         }
     }
 
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.gameObject.name == "StartGame")
+        {
+            Destroy(collision.gameObject);
+            float currentTime = Time.time;
+            while(Time.time < currentTime + 3.0)
+            {   }
+            return;
+        }
+        if(startGameButton != null)
+        {
+            return;
+        }
+    
+        if (!gameObject.GetComponent<Rigidbody>())      ///////////////////////////   game over
+        {
+            // Game over
+            //Debug.Log("Game over");
+            //Time.timeScale = 0;
+            
+        }
         if (collision.gameObject.name == "Plane")
         {
             Destroy(gameObject);
@@ -283,6 +319,14 @@ public class RespawnObject : MonoBehaviour {
             object_exists = false;
         }
 
+    }
+
+    private void initGame()
+    {
+        startGameButton = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        startGameButton.name = "StartGame";
+        startGameButton.transform.localScale = new Vector3(4f, 2f, 0.5f);
+        startGameButton.transform.position = new Vector3(261.312f, 4.96f, 111.51f);
     }
 
 }

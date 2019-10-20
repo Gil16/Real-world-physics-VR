@@ -1,11 +1,15 @@
 fileFormatVersion: 2
 guid: bafa97468e7e91d429ae85500c83d763
-timeCreated: 1553965537
-licenseType: Free
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - trackedObj: {instanceID: 0}
+  - ballPrefab: {instanceID: 0}
+  - planePrefab: {instanceID: 0}
+  - spikeBallPrefab: {instanceID: 0}
+  - woodenBallPrefab: {instanceID: 0}
+  - bombBallPrefab: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

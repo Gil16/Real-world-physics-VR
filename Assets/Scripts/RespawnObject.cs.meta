@@ -1,11 +1,13 @@
 fileFormatVersion: 2
 guid: e4798b35a725617479c4f20722df02c4
-timeCreated: 1553946351
-licenseType: Free
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - fencePrefab: {instanceID: 0}
+  - wallEPrefab: {instanceID: 0}
+  - elephantPrefab: {instanceID: 0}
+  - explosionPrefab: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
