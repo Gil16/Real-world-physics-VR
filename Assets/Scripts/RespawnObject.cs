@@ -337,14 +337,24 @@ public class RespawnObject : MonoBehaviour {
         text.GetComponent<TextMesh>().name = "start";
         text.GetComponent<TextMesh>().fontSize = 70;
         text.GetComponent<TextMesh>().transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-        text.GetComponent<TextMesh>().transform.localPosition += new Vector3(260.602f, 5.346f, 111.51f); 
+        text.GetComponent<TextMesh>().transform.localPosition = new Vector3(260.602f, 5.346f, 111.51f); 
     }
 
     private void gameOver()
     {
         game_over = true;
         Destroy(moving.CurrentObject);
-      //  Time.timeScale = 0;
+
+        GameObject text_gameover = new GameObject();
+        text_gameover.AddComponent<TextMesh>();
+        text_gameover.GetComponent<TextMesh>().text = "Game over \nScore : " + current_score + "\nTime : " + timerObj.GetComponent<TextMesh>().text;
+        text_gameover.GetComponent<Renderer>().material.color = Color.red;
+        text_gameover.GetComponent<TextMesh>().fontSize = 70;
+        text_gameover.GetComponent<TextMesh>().transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        text_gameover.GetComponent<TextMesh>().transform.localPosition = new Vector3(259.7f, 8.92f, 112.55f);
+
+        initGame();
+
     }
 
     private void startScore()
