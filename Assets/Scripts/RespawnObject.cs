@@ -26,6 +26,8 @@ public class RespawnObject : MonoBehaviour {
     private const int SPIKE_BALL_DAMAGE = 150;
 
 
+    private static bool co_running = false;
+
     private static bool start_game = false;
 
     private static bool object_exists = false;
@@ -234,7 +236,7 @@ public class RespawnObject : MonoBehaviour {
 	
 	// Update is called once per frameW
 	void Update () {
-        if (!startGameButton)
+        if (!startGameButton && !co_running)
         {
             if (!object_exists)
             {
@@ -274,9 +276,7 @@ public class RespawnObject : MonoBehaviour {
         if (collision.gameObject.name == "StartGame")
         {
             Destroy(collision.gameObject);
-            float currentTime = Time.time;
-            while(Time.time < currentTime + 3.0)
-            {   }
+            StartCoroutine(waitSomeSec(0.99999f));
             return;
         }
         if(startGameButton != null)
@@ -327,6 +327,13 @@ public class RespawnObject : MonoBehaviour {
         startGameButton.name = "StartGame";
         startGameButton.transform.localScale = new Vector3(4f, 2f, 0.5f);
         startGameButton.transform.position = new Vector3(261.312f, 4.96f, 111.51f);
+    }
+
+    IEnumerator waitSomeSec(float sec)
+    {
+        co_running = true;
+        yield return new WaitForSeconds(sec);
+        co_running = false;
     }
 
 }
