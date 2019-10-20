@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,6 +15,14 @@ public class RespawnObject : MonoBehaviour {
     public GameObject explosionPrefab;
 
 
+    private static GameObject text;
+
+    private static GameObject startGameButton;
+
+    private static GameObject score_board;
+
+    private static GameObject timerObj;
+
     private GameObject[] movingItems = new GameObject[NUMBER_OF_ITEMS];
 
 
@@ -26,22 +35,21 @@ public class RespawnObject : MonoBehaviour {
     private const int SPIKE_BALL_DAMAGE = 150;
 
 
-    private static bool co_running = false;
+    private static bool init_flag = false;
+
+    private static bool score_board_flag = false;
+
+    private static bool game_over = false;
 
     private static bool start_game = false;
 
     private static bool object_exists = false;
 
-    private static GameObject startGameButton;
-
     private static MovingObject moving = new MovingObject();
 
     private static int current_score = 0;
 
-    private static GameObject score_board;
-
-    private static bool score_board_flag = false;
-
+    private static float startTime;
 
 
     public class MovingObject
@@ -215,32 +223,22 @@ public class RespawnObject : MonoBehaviour {
         movingItems[2] = elephantPrefab;
 
         // start the game
-        if (!start_game)
+        if (!init_flag)
         {
-            start_game = true;
-            initGame();
-        }
-
-        if (!score_board_flag)
-        {
-            score_board = new GameObject();
-            score_board.AddComponent<TextMesh>();
-            score_board.transform.position = new Vector3(252.8f, 21.9f, 175.723f);
-            score_board.GetComponent<TextMesh>().text = "0";
-            score_board.GetComponent<TextMesh>().fontSize = 20;
-            score_board_flag = true;
-        }
-
-        
+            init_flag = true;
+            initGame();   
+            
+        } 
     }
 	
 	// Update is called once per frameW
 	void Update () {
-        if (!startGameButton && !co_running)
+        if (start_game && !game_over)
         {
+            updateTime();
             if (!object_exists)
             {
-                int rand = Random.Range(0, NUMBER_OF_ITEMS);
+                int rand = UnityEngine.Random.Range(0, NUMBER_OF_ITEMS);
                 switch (rand)
                 {
                     case 0:
@@ -275,21 +273,25 @@ public class RespawnObject : MonoBehaviour {
     {
         if (collision.gameObject.name == "StartGame")
         {
+
             Destroy(collision.gameObject);
-            StartCoroutine(waitSomeSec(0.99999f));
+            text.GetComponent<TextMesh>().text = "";
+            Destroy(text); 
+
+            start_game = true;
+            startTimer();
+            startScore();      
             return;
         }
-        if(startGameButton != null)
+        if(!start_game)
         {
             return;
-        }
+        } 
     
-        if (!gameObject.GetComponent<Rigidbody>())      ///////////////////////////   game over
+        if (!gameObject.GetComponent<Rigidbody>())
         {
-            // Game over
-            //Debug.Log("Game over");
-            //Time.timeScale = 0;
-            
+            gameOver();
+            return;
         }
         if (collision.gameObject.name == "Plane")
         {
@@ -309,7 +311,6 @@ public class RespawnObject : MonoBehaviour {
         {
             moving.Hp = moving.Hp - SPIKE_BALL_DAMAGE;
         }
-
         Destroy(gameObject);
         if (moving.Hp <= 0)
         {
@@ -321,19 +322,60 @@ public class RespawnObject : MonoBehaviour {
 
     }
 
+
     private void initGame()
     {
         startGameButton = GameObject.CreatePrimitive(PrimitiveType.Cube);
         startGameButton.name = "StartGame";
-        startGameButton.transform.localScale = new Vector3(4f, 2f, 0.5f);
+        startGameButton.GetComponent<Renderer>().material.color = Color.black;
+        startGameButton.transform.localScale = new Vector3(2f, 1f, 0.5f);
         startGameButton.transform.position = new Vector3(261.312f, 4.96f, 111.51f);
+
+        text = new GameObject();
+        text.AddComponent<TextMesh>();
+        text.GetComponent<TextMesh>().text = "Start";
+        text.GetComponent<TextMesh>().name = "start";
+        text.GetComponent<TextMesh>().fontSize = 70;
+        text.GetComponent<TextMesh>().transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        text.GetComponent<TextMesh>().transform.localPosition += new Vector3(260.602f, 5.346f, 111.51f); 
     }
 
-    IEnumerator waitSomeSec(float sec)
+    private void gameOver()
     {
-        co_running = true;
-        yield return new WaitForSeconds(sec);
-        co_running = false;
+        game_over = true;
+        Destroy(moving.CurrentObject);
+      //  Time.timeScale = 0;
     }
+
+    private void startScore()
+    {
+            score_board = new GameObject();
+            score_board.AddComponent<TextMesh>();
+            score_board.transform.position = new Vector3(252.8f, 21.9f, 175.723f);
+            score_board.GetComponent<TextMesh>().text = "0";
+            score_board.GetComponent<TextMesh>().fontSize = 20;
+    }
+
+    private void startTimer()
+    {
+        timerObj = new GameObject();
+        timerObj.AddComponent<TextMesh>();
+        timerObj.transform.position = new Vector3(269.48f,21.9f, 175.723f);
+        timerObj.GetComponent<TextMesh>().fontSize = 20;
+
+        startTime = Time.time;
+    }
+
+    private void updateTime()
+    {
+        float t = Time.time - startTime;
+
+        string minutes = ((int)t / 60).ToString("f0");
+        string seconds = (t % 60).ToString("f0");
+
+        timerObj.GetComponent<TextMesh>().text = minutes + ":" + seconds;
+    }
+
+
 
 }

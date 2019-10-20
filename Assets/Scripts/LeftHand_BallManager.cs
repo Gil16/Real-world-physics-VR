@@ -238,7 +238,6 @@ public class LeftHand_BallManager : MonoBehaviour
                     ball.Ball_Object.GetComponent<Rigidbody>().useGravity = true;
 
                     ball.Ball_Object.GetComponent<Rigidbody>().AddTorque(Vector3.forward);
-
                     ball.Ball_Object.AddComponent<TrailRenderer>();
                     ball.Ball_Object.GetComponent<TrailRenderer>().startWidth = 0.20f;
                     ball.Ball_Object.GetComponent<TrailRenderer>().endWidth = 0.05f;
