@@ -18,6 +18,10 @@ public class RespawnObject : MonoBehaviour {
 
     public static bool start_game = false;
 
+    public static bool game_over = false;
+
+    public static float startTime;
+
 
     private static GameObject text;
 
@@ -49,15 +53,12 @@ public class RespawnObject : MonoBehaviour {
 
     private static bool score_board_flag = false;
 
-    private static bool game_over = false;
-
     private static bool object_exists = false;
 
     private static MovingObject moving = new MovingObject();
 
     private static int current_score = 0;
 
-    private static float startTime;
 
 
     public class MovingObject
@@ -173,7 +174,7 @@ public class RespawnObject : MonoBehaviour {
         {
             Hp = 100;
             Score = 5;
-            Speed = 10f;
+            Speed = 5f;
             StartingPosition = new Vector3(254.665f, 1.02f, 170.023f);
             Scale = new Vector3(0.8f, 0.8f, 0.8f);
             Rotation = Quaternion.identity;
@@ -191,7 +192,7 @@ public class RespawnObject : MonoBehaviour {
         public MovingWallE(GameObject wallE) {
             Hp = 180;
             Score = 10;
-            Speed = 5f;
+            Speed = 3f;
             StartingPosition = new Vector3(256.665f, 1.02f, 170.023f);
             Scale = new Vector3(0.2f, 0.2f, 0.2f);
             Rotation = Quaternion.Euler(0f,90f,0f);
@@ -210,7 +211,7 @@ public class RespawnObject : MonoBehaviour {
         {
             Hp = 150;
             Score = 6;
-            Speed = 8f;
+            Speed = 4f;
             StartingPosition = new Vector3(260f, 0.6f, 170.023f);
             Scale = new Vector3(100f, 100f, 100f);
             Rotation = Quaternion.Euler(0f, 180f, 0f);
@@ -346,6 +347,7 @@ public class RespawnObject : MonoBehaviour {
         startGameButton = GameObject.CreatePrimitive(PrimitiveType.Cube);
         startGameButton.name = "StartGame";
         startGameButton.GetComponent<Renderer>().material.color = Color.black;
+        startGameButton.GetComponent<Renderer>().shadowCastingMode = 0;
         startGameButton.transform.localScale = new Vector3(2f, 1f, 0.5f);
         startGameButton.transform.position = new Vector3(261.312f, 5.26f, 111.51f);
 
@@ -353,7 +355,7 @@ public class RespawnObject : MonoBehaviour {
         text.AddComponent<TextMesh>();
         text.GetComponent<TextMesh>().text = "Start";
         text.GetComponent<TextMesh>().name = "start";
-        text.GetComponent<TextMesh>().fontSize = 70;
+        text.GetComponent<TextMesh>().fontSize = 70;       
         text.GetComponent<TextMesh>().transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         text.GetComponent<TextMesh>().transform.localPosition = new Vector3(260.602f, 5.646f, 111.51f); 
     }

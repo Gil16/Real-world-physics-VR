@@ -22,6 +22,10 @@ public class LeftHand_BallManager : MonoBehaviour
     public GameObject bombBallPrefab;
 
 
+    public static bool wind_on = false;
+
+    public static bool right_wind = false;
+
     public static int counter = 0;
 
     public static Vector3[] points = new Vector3[LIMIT];
@@ -56,9 +60,6 @@ public class LeftHand_BallManager : MonoBehaviour
 
     private static int frame_count = 0;
 
-    public static bool wind_on = false;
-
-    private static bool right_wind = false;
 
   //  private static float the_time;
 
@@ -82,7 +83,7 @@ public class LeftHand_BallManager : MonoBehaviour
         {
             Damage = 150;
             Speed = 3f;
-            Scale = new Vector3(0.2f, 0.2f, 0.2f);
+            Scale = new Vector3(0.4f, 0.4f, 0.4f);
             Ball_Object = Instantiate(spikeBall);
 
             Ball_Object.transform.localScale = Scale;
@@ -97,7 +98,7 @@ public class LeftHand_BallManager : MonoBehaviour
         {
             Damage = 100;
             Speed = 3f;
-            Scale = new Vector3(0.2f, 0.2f, 0.2f);
+            Scale = new Vector3(0.4f, 0.4f, 0.4f);
             Ball_Object = Instantiate(spikeBall);
 
             Ball_Object.transform.localScale = Scale;
@@ -112,7 +113,7 @@ public class LeftHand_BallManager : MonoBehaviour
         {
             Damage = 200;
             Speed = 3f;
-            Scale = new Vector3(0.2f, 0.2f, 0.2f);
+            Scale = new Vector3(0.3f, 0.3f, 0.3f);
             Ball_Object = Instantiate(spikeBall);
 
             Ball_Object.transform.localScale = Scale;
@@ -142,7 +143,7 @@ public class LeftHand_BallManager : MonoBehaviour
         }
         else
         {
-            if((Mathf.Floor(Time.time) % 25) == 0)
+            if((Mathf.Floor(Time.time - RespawnObject.startTime) % 20) == 0)
             {
                 wind_on = !wind_on;
                 if (wind_on)
