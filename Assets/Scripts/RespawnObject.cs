@@ -209,7 +209,7 @@ public class RespawnObject : MonoBehaviour {
     {
         public MovingElephant(GameObject elephant)
         {
-            Hp = 150;
+            Hp = 100;
             Score = 6;
             Speed = 4f;
             StartingPosition = new Vector3(260f, 0.6f, 170.023f);
@@ -272,6 +272,10 @@ public class RespawnObject : MonoBehaviour {
 
         if (object_exists) {            
             if (moving.CurrentObject.transform.position.z <= LeftHand_BallManager.points[0].z) {         //// need right hand too ////////////////
+                if (LeftHand_BallManager.ball.Ball_Object.GetComponent<Rigidbody>())
+                {
+                    Destroy(LeftHand_BallManager.ball.Ball_Object);
+                }
                 gameOver();
             }
         }

@@ -56,7 +56,7 @@ public class LeftHand_BallManager : MonoBehaviour
 
     private static GameObject[] trail = new GameObject[LIMIT];
 
-    private static Ball ball = new Ball();
+    public static Ball ball = new Ball();
 
     private static bool ball_exists = false;
 
@@ -79,13 +79,13 @@ public class LeftHand_BallManager : MonoBehaviour
         public GameObject Ball_Object { get => ball_object; set => ball_object = value; }
     }
 
-    class SpikeBall : Ball
+    public class SpikeBall : Ball
     {
         public SpikeBall(GameObject spikeBall)
         {
             Damage = 150;
             Speed = 3f;
-            Scale = new Vector3(0.4f, 0.4f, 0.4f);
+            Scale = new Vector3(0.48f, 0.48f, 0.48f);
             Ball_Object = Instantiate(spikeBall);
 
             Ball_Object.transform.localScale = Scale;
@@ -94,13 +94,13 @@ public class LeftHand_BallManager : MonoBehaviour
 
     }
 
-    class WoodenBall : Ball
+    public class WoodenBall : Ball
     {
         public WoodenBall(GameObject spikeBall)
         {
             Damage = 100;
             Speed = 3f;
-            Scale = new Vector3(0.4f, 0.4f, 0.4f);
+            Scale = new Vector3(0.7f, 0.7f, 0.7f);
             Ball_Object = Instantiate(spikeBall);
 
             Ball_Object.transform.localScale = Scale;
@@ -109,13 +109,13 @@ public class LeftHand_BallManager : MonoBehaviour
 
     }
 
-    class BombBall : Ball
+    public class BombBall : Ball
     {
         public BombBall(GameObject spikeBall)
         {
             Damage = 200;
             Speed = 3f;
-            Scale = new Vector3(0.3f, 0.3f, 0.3f);
+            Scale = new Vector3(0.55f, 0.55f, 0.55f);
             Ball_Object = Instantiate(spikeBall);
 
             Ball_Object.transform.localScale = Scale;
