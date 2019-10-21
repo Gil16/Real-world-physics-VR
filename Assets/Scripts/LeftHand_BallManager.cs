@@ -22,6 +22,11 @@ public class LeftHand_BallManager : MonoBehaviour
     public GameObject bombBallPrefab;
 
 
+    public static int counter = 0;
+
+    public static Vector3[] points = new Vector3[LIMIT];
+
+
     private GameObject[] ballTypes = new GameObject[BALL_TYPES_NUMBER];
 
 
@@ -35,16 +40,11 @@ public class LeftHand_BallManager : MonoBehaviour
 
     private const float MAX_AVERAGE_VELOCITY = 3f;
 
-
-    private static int counter = 0;
-
     private static int SPEED_COUNTER = 0;
 
     private static bool throwing = false;
 
     private static Vector3 pointA = Vector3.positiveInfinity;
-
-    private static Vector3[] points = new Vector3[LIMIT];
 
     private static float[] speeds = new float[LIMIT];
 
@@ -56,7 +56,7 @@ public class LeftHand_BallManager : MonoBehaviour
 
     private static int frame_count = 0;
 
-    private static bool wind_on = false;
+    public static bool wind_on = false;
 
     private static bool right_wind = false;
 
@@ -150,7 +150,7 @@ public class LeftHand_BallManager : MonoBehaviour
                     right_wind = !right_wind;
                 }
             }
-            if (wind_on)
+            if (wind_on && RespawnObject.start_game)
             {
                 MoveBall();
             }

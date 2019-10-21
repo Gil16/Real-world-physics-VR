@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Valve.VR;
 
 
 public class RespawnObject : MonoBehaviour {
@@ -15,13 +16,22 @@ public class RespawnObject : MonoBehaviour {
     public GameObject explosionPrefab;
 
 
+    public static bool start_game = false;
+
+
     private static GameObject text;
 
     private static GameObject startGameButton;
 
     private static GameObject score_board;
 
+    private static GameObject score_text;
+
+    private static GameObject time_text;
+
     private static GameObject timerObj;
+
+    private static GameObject text_gameover;
 
     private GameObject[] movingItems = new GameObject[NUMBER_OF_ITEMS];
 
@@ -40,8 +50,6 @@ public class RespawnObject : MonoBehaviour {
     private static bool score_board_flag = false;
 
     private static bool game_over = false;
-
-    private static bool start_game = false;
 
     private static bool object_exists = false;
 
@@ -218,18 +226,12 @@ public class RespawnObject : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        movingItems[0] = fencePrefab;
-        movingItems[1] = wallEPrefab;
-        movingItems[2] = elephantPrefab;
-
-        // start the game
         if (!init_flag)
         {
             init_flag = true;
             initGame();   
-            
         } 
-    }
+    }    
 	
 	// Update is called once per frameW
 	void Update () {
@@ -266,6 +268,12 @@ public class RespawnObject : MonoBehaviour {
                 object_exists = false;
             }
         }
+
+        if (object_exists) {            
+            if (moving.CurrentObject.transform.position.z <= LeftHand_BallManager.points[0].z) {         //// need right hand too ////////////////
+                gameOver();
+            }
+        }
     }
 
 
@@ -273,10 +281,16 @@ public class RespawnObject : MonoBehaviour {
     {
         if (collision.gameObject.name == "StartGame")
         {
-
             Destroy(collision.gameObject);
             text.GetComponent<TextMesh>().text = "";
-            Destroy(text); 
+            Destroy(text);
+
+            if (game_over)
+            {
+                text_gameover.GetComponent<TextMesh>().text = "";
+                Destroy(text_gameover);
+                game_over = false;
+            }
 
             start_game = true;
             startTimer();
@@ -292,7 +306,7 @@ public class RespawnObject : MonoBehaviour {
         {
             gameOver();
             return;
-        }
+        } 
         if (collision.gameObject.name == "Plane")
         {
             Destroy(gameObject);
@@ -325,11 +339,15 @@ public class RespawnObject : MonoBehaviour {
 
     private void initGame()
     {
+        movingItems[0] = fencePrefab;
+        movingItems[1] = wallEPrefab;
+        movingItems[2] = elephantPrefab;
+
         startGameButton = GameObject.CreatePrimitive(PrimitiveType.Cube);
         startGameButton.name = "StartGame";
         startGameButton.GetComponent<Renderer>().material.color = Color.black;
         startGameButton.transform.localScale = new Vector3(2f, 1f, 0.5f);
-        startGameButton.transform.position = new Vector3(261.312f, 4.96f, 111.51f);
+        startGameButton.transform.position = new Vector3(261.312f, 5.26f, 111.51f);
 
         text = new GameObject();
         text.AddComponent<TextMesh>();
@@ -337,15 +355,16 @@ public class RespawnObject : MonoBehaviour {
         text.GetComponent<TextMesh>().name = "start";
         text.GetComponent<TextMesh>().fontSize = 70;
         text.GetComponent<TextMesh>().transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-        text.GetComponent<TextMesh>().transform.localPosition = new Vector3(260.602f, 5.346f, 111.51f); 
+        text.GetComponent<TextMesh>().transform.localPosition = new Vector3(260.602f, 5.646f, 111.51f); 
     }
 
     private void gameOver()
     {
         game_over = true;
         Destroy(moving.CurrentObject);
+        object_exists = false;
 
-        GameObject text_gameover = new GameObject();
+        text_gameover = new GameObject();
         text_gameover.AddComponent<TextMesh>();
         text_gameover.GetComponent<TextMesh>().text = "Game over \nScore : " + current_score + "\nTime : " + timerObj.GetComponent<TextMesh>().text;
         text_gameover.GetComponent<Renderer>().material.color = Color.red;
@@ -353,21 +372,44 @@ public class RespawnObject : MonoBehaviour {
         text_gameover.GetComponent<TextMesh>().transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         text_gameover.GetComponent<TextMesh>().transform.localPosition = new Vector3(259.7f, 8.92f, 112.55f);
 
-        initGame();
+        score_text.GetComponent<TextMesh>().text = "";
+        Destroy(score_text);
+        score_board.GetComponent<TextMesh>().text = "";
+        Destroy(score_board);
+        time_text.GetComponent<TextMesh>().text = "";
+        Destroy(time_text);
+        timerObj.GetComponent<TextMesh>().text = "";
+        Destroy(timerObj);
 
+        initGame();
+        start_game = false;
     }
 
     private void startScore()
     {
-            score_board = new GameObject();
-            score_board.AddComponent<TextMesh>();
-            score_board.transform.position = new Vector3(252.8f, 21.9f, 175.723f);
-            score_board.GetComponent<TextMesh>().text = "0";
-            score_board.GetComponent<TextMesh>().fontSize = 20;
+        score_text = new GameObject();
+        score_text.AddComponent<TextMesh>();
+        score_text.transform.position = new Vector3(246.28f, 22f, 175.723f);
+        score_text.GetComponent<TextMesh>().text = "Score:";
+        score_text.GetComponent<TextMesh>().fontSize = 20;
+
+        score_board = new GameObject();
+        score_board.AddComponent<TextMesh>();
+        score_board.transform.position = new Vector3(252.8f, 21.9f, 175.723f);
+        score_board.GetComponent<TextMesh>().text = "0";
+        score_board.GetComponent<TextMesh>().fontSize = 20;
+
+        current_score = 0;
     }
 
     private void startTimer()
     {
+        time_text = new GameObject();
+        time_text.AddComponent<TextMesh>();
+        time_text.transform.position = new Vector3(263.48f, 22f, 175.723f);
+        time_text.GetComponent<TextMesh>().text = "Time:";
+        time_text.GetComponent<TextMesh>().fontSize = 20;
+
         timerObj = new GameObject();
         timerObj.AddComponent<TextMesh>();
         timerObj.transform.position = new Vector3(269.48f,21.9f, 175.723f);
