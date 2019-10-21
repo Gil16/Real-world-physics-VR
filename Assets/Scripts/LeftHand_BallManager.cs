@@ -22,6 +22,8 @@ public class LeftHand_BallManager : MonoBehaviour
     public GameObject bombBallPrefab;
 
 
+    public static bool change_wind = true;
+
     public static bool wind_on = false;
 
     public static bool right_wind = false;
@@ -137,25 +139,15 @@ public class LeftHand_BallManager : MonoBehaviour
     void Update()
     {
         attachBall();
+        if (RespawnObject.game_over)
+        {
+            wind_on = false;
+        }
         if (!ball.Ball_Object.GetComponent<Rigidbody>())
         {
             Fire();
         }
-        else
-        {
-            if((Mathf.Floor(Time.time - RespawnObject.startTime) % 20) == 0)
-            {
-                wind_on = !wind_on;
-                if (wind_on)
-                {
-                    right_wind = !right_wind;
-                }
-            }
-            if (wind_on && RespawnObject.start_game)
-            {
-                MoveBall();
-            }
-        }                                                                                                                                                                                                                                                                                                                  
+         windTimer();                                                                                                                                                                                                                                                                                                               
         // use the points array to display the points 
         if (ball.Ball_Object.transform.position.y < 0.08)
         {
@@ -304,6 +296,25 @@ public class LeftHand_BallManager : MonoBehaviour
         }
     }
 
+    private void windTimer() {
+        if (((Mathf.Floor(Time.time - RespawnObject.startTime + 1) % 20) == 0) && change_wind && !RespawnObject.game_over)
+        {
+            change_wind = false;
+            wind_on = !wind_on;
+            if (wind_on)
+            {
+                right_wind = !right_wind;
+            }
+        }
+        if (((Mathf.Floor(Time.time - RespawnObject.startTime + 1) % 20) == 1) && !change_wind && !RespawnObject.game_over)
+        {
+            change_wind = true;
+        }
+        if (wind_on && RespawnObject.start_game && ball.Ball_Object.GetComponent<Rigidbody>())
+        {
+            MoveBall();
+        }
+    }
 
     private void MoveBall()
     {

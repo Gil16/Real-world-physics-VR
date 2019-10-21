@@ -28,32 +28,30 @@ public class Wind : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Right side = " + windFromLeft.particleCount);
-        Debug.Log("Left side = " + windFromRight.particleCount);
-        Debug.Log("Wind is " + LeftHand_BallManager.wind_on);
-        if (LeftHand_BallManager.wind_on && !LeftHand_BallManager.right_wind && RespawnObject.start_game && !windFromRight.isPlaying)
-        {
-            windFromRight.Play();
-        }
-        else if (LeftHand_BallManager.wind_on && LeftHand_BallManager.right_wind && RespawnObject.start_game && !windFromLeft.isPlaying)
+        if (LeftHand_BallManager.wind_on && LeftHand_BallManager.right_wind && RespawnObject.start_game && !windFromRight.isPlaying)
         {
             windFromLeft.Play();
         }
+        else if (LeftHand_BallManager.wind_on && !LeftHand_BallManager.right_wind && RespawnObject.start_game && !windFromLeft.isPlaying)
+        {
+            windFromRight.Play();
+            
+        }
         else if (!LeftHand_BallManager.wind_on && RespawnObject.start_game)
         {
+            windFromLeft.Stop();
+            windFromRight.Stop();
             windFromRight.Clear();
             windFromLeft.Clear();
-            windFromLeft.Stop();            
-            windFromRight.Stop();
+           
         }
         else if (LeftHand_BallManager.wind_on &&  RespawnObject.game_over)
         {
-            windFromLeft.Clear();
-            windFromRight.Clear();
             windFromLeft.Stop();
             windFromRight.Stop();
-            
-        }                 
-        
+            windFromLeft.Clear();
+            windFromRight.Clear();
+        }    
+              
     }
 }
