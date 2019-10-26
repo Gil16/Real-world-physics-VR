@@ -253,6 +253,10 @@ public class RespawnObject : MonoBehaviour {
             CurrentObject.transform.position = StartingPosition;
             CurrentObject.transform.localScale = Scale;
             CurrentObject.transform.localRotation = Rotation;
+
+            CurrentObject.GetComponent<Rigidbody>().drag = 0;
+            CurrentObject.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+            CurrentObject.GetComponent<Rigidbody>().freezeRotation = true;
         }
 
         public MovingWallE(GameObject wallE, Vector3 position)
@@ -277,7 +281,7 @@ public class RespawnObject : MonoBehaviour {
     {
         public MovingElephant(GameObject elephant)
         {
-            Hp = 100;
+            Hp = 150;
             Score = 6;
             Speed = 4f;
             StartingPosition = new Vector3(260f, 0.6f, 170.023f);
@@ -288,6 +292,11 @@ public class RespawnObject : MonoBehaviour {
             CurrentObject.transform.position = StartingPosition;
             CurrentObject.transform.localScale = Scale;
             CurrentObject.transform.localRotation = Rotation;
+
+
+            CurrentObject.GetComponent<Rigidbody>().drag = 0;
+            CurrentObject.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+            CurrentObject.GetComponent<Rigidbody>().freezeRotation = true;
         }
 
         public MovingElephant(GameObject elephant,Vector3 position)
@@ -366,11 +375,11 @@ public class RespawnObject : MonoBehaviour {
             int curr_timer = (int)(3 - (Mathf.Floor(Time.realtimeSinceStartup - current_time_tut)));
             if (current_tut_num == 4)
             {
-                timer_text_count.GetComponent<TextMesh>().text = "Good job tutorial is finished!";
+                timer_text_count.GetComponent<TextMesh>().text = "Good Job! tutorial is finished.";
             }
             else
             {
-                timer_text_count.GetComponent<TextMesh>().text = "Good Job!, Next tutorial in : " + curr_timer;
+                timer_text_count.GetComponent<TextMesh>().text = "Well done! Next tutorial in : " + curr_timer;
             }
             if (current_time_tut + 3f < Time.realtimeSinceStartup) {                
                 timer_text_count.GetComponent<TextMesh>().text = "";                
@@ -414,7 +423,7 @@ public class RespawnObject : MonoBehaviour {
         else if (collision.gameObject.name == "Transparent_Tutorial2")
         {
             demand_ball = 2;
-            Tut2_instruction.GetComponent<TextMesh>().text = "Good Job!\nThe bomb can destroy any object in one hit";
+            Tut2_instruction.GetComponent<TextMesh>().text = "Nice!\nThe bomb can destroy any object in one hit";
             Destroy(collision.gameObject);
             Destroy(gameObject);
             tut2.CurrentObject.GetComponent<Rigidbody>().detectCollisions = true;
@@ -524,7 +533,7 @@ public class RespawnObject : MonoBehaviour {
         timer_text_count.GetComponent<TextMesh>().fontSize = 120;
         timer_text_count.GetComponent<Renderer>().material.color = Color.white;
         timer_text_count.GetComponent<TextMesh>().transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-        timer_text_count.GetComponent<TextMesh>().transform.localPosition = new Vector3(248.92f, 16.08f, 147.36f);
+        timer_text_count.GetComponent<TextMesh>().transform.localPosition = new Vector3(252.2f, 16.08f, 147.36f);
         timer_text_count.GetComponent<TextMesh>().fontStyle = FontStyle.Bold;
 
         startGameButton = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -585,20 +594,20 @@ public class RespawnObject : MonoBehaviour {
         Tut1_instruction.GetComponent<TextMesh>().fontSize = 120;
         Tut1_instruction.GetComponent<Renderer>().material.color = Color.white;
         Tut1_instruction.GetComponent<TextMesh>().transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-        Tut1_instruction.GetComponent<TextMesh>().transform.localPosition = new Vector3(248.92f, 16.08f, 147.36f);
+        Tut1_instruction.GetComponent<TextMesh>().transform.localPosition = new Vector3(245.28f, 16.08f, 147.36f);
     }
 
 
     private void Tutorial2()
     {
-        tut2 = new MovingWallE(movingItems[1], new Vector3(254.665f, 1.02f, 130f));
+        tut2 = new MovingWallE(movingItems[1], new Vector3(259.665f, 1.02f, 130f));
         tut2.CurrentObject.transform.name = "Tutorial2";
         tut2.CurrentObject.GetComponent<Rigidbody>().useGravity = false;
         tut2.CurrentObject.GetComponent<Rigidbody>().detectCollisions = false;
 
         transparent_wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
         transparent_wall.transform.name = "Transparent_Tutorial2";
-        transparent_wall.transform.position = new Vector3(257.59f, 4.64f, 129.05f);
+        transparent_wall.transform.position = new Vector3(262.59f, 4.64f, 129.05f);
         transparent_wall.transform.localScale = new Vector3(5f, 5f, 0.2f);
         transparent_wall.GetComponent<BoxCollider>().center = new Vector3(-0.001132202f, -0.009615612f, 0);
         transparent_wall.GetComponent<BoxCollider>().size = new Vector3(1.186383f, 1.449679f, 1f);
@@ -612,7 +621,7 @@ public class RespawnObject : MonoBehaviour {
         Tut2_instruction.GetComponent<TextMesh>().fontSize = 120;
         Tut2_instruction.GetComponent<Renderer>().material.color = Color.white;
         Tut2_instruction.GetComponent<TextMesh>().transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-        Tut2_instruction.GetComponent<TextMesh>().transform.localPosition = new Vector3(248.92f, 16.08f, 147.36f);
+        Tut2_instruction.GetComponent<TextMesh>().transform.localPosition = new Vector3(252.09f, 16.08f, 147.36f);
     }
 
     private void Tutorial3()
@@ -634,7 +643,7 @@ public class RespawnObject : MonoBehaviour {
         Tut3_instruction.GetComponent<TextMesh>().fontSize = 120;
         Tut3_instruction.GetComponent<Renderer>().material.color = Color.white;
         Tut3_instruction.GetComponent<TextMesh>().transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-        Tut3_instruction.GetComponent<TextMesh>().transform.localPosition = new Vector3(248.92f, 16.08f, 147.36f);
+        Tut3_instruction.GetComponent<TextMesh>().transform.localPosition = new Vector3(250.72f, 16.08f, 147.36f);
 
         LeftHand_BallManager.wind_on = true;
         LeftHand_BallManager.right_wind = true;
