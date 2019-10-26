@@ -273,6 +273,10 @@ public class LeftHand_BallManager : MonoBehaviour
         if (!ball.Ball_Object || !ball_exists)
         {
             int rand = Random.Range(0, BALL_TYPES_NUMBER);
+            if(RespawnObject.demand_ball != 3)
+            {
+                rand = RespawnObject.demand_ball;
+            }
             switch (rand)
             {
                 case 0:
