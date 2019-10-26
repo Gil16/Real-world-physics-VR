@@ -20,14 +20,37 @@ public class RespawnObject : MonoBehaviour {
 
     public static bool game_over = false;
 
+    public static bool tutorial = false;
+
+    
+
     public static float startTime;
 
+    private static MovingObject tut1 = new MovingObject();
 
-    private static GameObject text;
+    private static MovingObject tut2 = new MovingObject();
+
+    private static MovingObject tut3 = new MovingObject();
+
+    private static GameObject startText;
 
     private static GameObject startGameButton;
 
+    private static GameObject tutorialText;
+
+    private static GameObject tutorialGameButton;
+
     private static GameObject score_board;
+
+    private static GameObject instruction1;
+
+    private static GameObject Tut1_instruction;
+
+    private static GameObject Tut2_instruction;
+
+    private static GameObject Tut3_instruction;
+
+    private static GameObject timer_text_count;
 
     private static GameObject score_text;
 
@@ -37,10 +60,14 @@ public class RespawnObject : MonoBehaviour {
 
     private static GameObject text_gameover;
 
-    private GameObject[] movingItems = new GameObject[NUMBER_OF_ITEMS];
+    private static GameObject[] movingItems = new GameObject[NUMBER_OF_ITEMS];
 
+
+    private static float current_time_tut;
 
     private const int NUMBER_OF_ITEMS = 3;
+
+    private static int current_tut_num;
 
     private const int BOMB_BALL_DAMAGE = 200;
 
@@ -48,6 +75,7 @@ public class RespawnObject : MonoBehaviour {
 
     private const int SPIKE_BALL_DAMAGE = 150;
 
+    private static bool tut_timer = false;
 
     private static bool init_flag = false;
 
@@ -185,6 +213,22 @@ public class RespawnObject : MonoBehaviour {
             CurrentObject.transform.localRotation = Rotation;
         }
 
+        public MovingFence(GameObject fence, Vector3 position) {
+
+            Hp = 100;
+            Score = 5;
+            Speed = 0f;
+            StartingPosition = position;
+            Scale = new Vector3(0.8f, 0.8f, 0.8f);
+            Rotation = Quaternion.identity;
+            CurrentObject = Instantiate(fence);
+
+           
+            CurrentObject.transform.position = StartingPosition;
+            CurrentObject.transform.localScale = Scale;
+            CurrentObject.transform.localRotation = Rotation;
+        }
+
     }
 
     class MovingWallE : MovingObject
@@ -196,6 +240,21 @@ public class RespawnObject : MonoBehaviour {
             StartingPosition = new Vector3(256.665f, 1.02f, 170.023f);
             Scale = new Vector3(0.2f, 0.2f, 0.2f);
             Rotation = Quaternion.Euler(0f,90f,0f);
+            CurrentObject = Instantiate(wallE);
+
+            CurrentObject.transform.position = StartingPosition;
+            CurrentObject.transform.localScale = Scale;
+            CurrentObject.transform.localRotation = Rotation;
+        }
+
+        public MovingWallE(GameObject wallE, Vector3 position)
+        {
+            Hp = 180;
+            Score = 10;
+            Speed = 0f;
+            StartingPosition = position;
+            Scale = new Vector3(0.2f, 0.2f, 0.2f);
+            Rotation = Quaternion.Euler(0f, 90f, 0f);
             CurrentObject = Instantiate(wallE);
 
             CurrentObject.transform.position = StartingPosition;
@@ -279,6 +338,18 @@ public class RespawnObject : MonoBehaviour {
                 gameOver();
             }
         }
+
+        if (tut_timer) {
+            int curr_timer = (int)(3 - (Mathf.Floor(Time.realtimeSinceStartup - current_time_tut)));
+            timer_text_count.GetComponent<TextMesh>().text = "Good Job!, Next tutorial in : " + curr_timer;
+            if (current_time_tut + 3f < Time.realtimeSinceStartup) {                
+                timer_text_count.GetComponent<TextMesh>().text = "";                
+            }
+            if (current_time_tut + 4f < Time.realtimeSinceStartup) {
+                tut_timer = false;
+                startTutorial(current_tut_num);
+            }
+        }
     }
 
 
@@ -286,9 +357,7 @@ public class RespawnObject : MonoBehaviour {
     {
         if (collision.gameObject.name == "StartGame")
         {
-            Destroy(collision.gameObject);
-            text.GetComponent<TextMesh>().text = "";
-            Destroy(text);
+            DestoryButtons();
 
             if (game_over)
             {
@@ -298,11 +367,30 @@ public class RespawnObject : MonoBehaviour {
             }
 
             start_game = true;
+            tutorial = false;
             startTimer();
             startScore();      
             return;
         }
-        if(!start_game)
+        else if (collision.gameObject.name == "TutorialButton") {
+            DestoryButtons();
+            Destroy(gameObject);
+            startTutorial(current_tut_num);
+        }
+        if (collision.gameObject.name == "Tutorial1") {
+            Destroy(collision.gameObject);
+            Tut1_instruction.GetComponent<TextMesh>().text = "";
+            current_time_tut = Time.realtimeSinceStartup;
+            tut_timer = true;
+            Destroy(Tut1_instruction);
+
+
+        }
+        if (collision.gameObject.name == "Plane")
+        {
+            Destroy(gameObject);
+        }
+        if (!start_game)
         {
             return;
         } 
@@ -312,10 +400,6 @@ public class RespawnObject : MonoBehaviour {
             gameOver();
             return;
         } 
-        if (collision.gameObject.name == "Plane")
-        {
-            Destroy(gameObject);
-        }
         else if (gameObject.name == "BombBall(Clone)")
         {
             GameObject exp = Instantiate(explosionPrefab, collision.contacts[0].point, Quaternion.identity);
@@ -341,28 +425,140 @@ public class RespawnObject : MonoBehaviour {
 
     }
 
+    private void DestoryButtons()
+    {
+        Destroy(startGameButton);
+        Destroy(tutorialGameButton);
+
+        startText.GetComponent<TextMesh>().text = "";
+        Destroy(startText);
+
+        tutorialText.GetComponent<TextMesh>().text = "";
+        Destroy(tutorialText);
+
+        instruction1.GetComponent<TextMesh>().text = "";
+        Destroy(instruction1);
+    }
 
     private void initGame()
     {
         movingItems[0] = fencePrefab;
         movingItems[1] = wallEPrefab;
         movingItems[2] = elephantPrefab;
+        current_tut_num = 1;
+
+        timer_text_count = new GameObject();
+        timer_text_count.AddComponent<TextMesh>();
+        timer_text_count.GetComponent<TextMesh>().text = "";
+        timer_text_count.GetComponent<TextMesh>().fontSize = 120;
+        timer_text_count.GetComponent<Renderer>().material.color = Color.white;
+        timer_text_count.GetComponent<TextMesh>().transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        timer_text_count.GetComponent<TextMesh>().transform.localPosition = new Vector3(248.92f, 16.08f, 147.36f);
+        timer_text_count.GetComponent<TextMesh>().fontStyle = FontStyle.Bold;
 
         startGameButton = GameObject.CreatePrimitive(PrimitiveType.Cube);
         startGameButton.name = "StartGame";
         startGameButton.GetComponent<Renderer>().material.color = Color.black;
         startGameButton.GetComponent<Renderer>().shadowCastingMode = 0;
-        startGameButton.transform.localScale = new Vector3(2f, 1f, 0.5f);
-        startGameButton.transform.position = new Vector3(261.312f, 5.26f, 111.51f);
+        startGameButton.transform.localScale = new Vector3(2.8f, 1f, 0.5f);
+        startGameButton.transform.position = new Vector3(258.5f, 5.48f, 111.51f);
 
-        text = new GameObject();
-        text.AddComponent<TextMesh>();
-        text.GetComponent<TextMesh>().text = "Start";
-        text.GetComponent<TextMesh>().name = "start";
-        text.GetComponent<TextMesh>().fontSize = 70;       
-        text.GetComponent<TextMesh>().transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-        text.GetComponent<TextMesh>().transform.localPosition = new Vector3(260.602f, 5.646f, 111.51f); 
+        startText = new GameObject();
+        startText.AddComponent<TextMesh>();
+        startText.GetComponent<TextMesh>().text = "Start";
+        startText.GetComponent<TextMesh>().name = "start";
+        startText.GetComponent<TextMesh>().fontSize = 70;
+        startText.GetComponent<TextMesh>().transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        startText.GetComponent<TextMesh>().transform.localPosition = new Vector3(257.65f, 5.87f, 111.51f);
+
+        tutorialGameButton = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        tutorialGameButton.name = "TutorialButton";
+        tutorialGameButton.GetComponent<Renderer>().material.color = Color.black;
+        tutorialGameButton.GetComponent<Renderer>().shadowCastingMode = 0;
+        tutorialGameButton.transform.localScale = new Vector3(2.8f, 1f, 0.5f);
+        tutorialGameButton.transform.position = new Vector3(263.81f, 5.48f, 111.51f);
+
+        tutorialText = new GameObject();
+        tutorialText.AddComponent<TextMesh>();
+        tutorialText.GetComponent<TextMesh>().text = "Tutorial";
+        tutorialText.GetComponent<TextMesh>().name = "tutorial";
+        tutorialText.GetComponent<TextMesh>().fontSize = 70;
+        tutorialText.GetComponent<TextMesh>().transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        tutorialText.GetComponent<TextMesh>().transform.localPosition = new Vector3(262.71f, 5.87f, 111.51f);
+
+        instruction1 = new GameObject();
+        instruction1.AddComponent<TextMesh>();
+        instruction1.GetComponent<TextMesh>().text = "Choose your option by throwing the ball";
+        instruction1.GetComponent<TextMesh>().fontStyle = FontStyle.Bold;
+        instruction1.GetComponent<TextMesh>().name = "instruction1";
+        instruction1.GetComponent<TextMesh>().fontSize = 120;
+        instruction1.GetComponent<Renderer>().material.color = Color.white;
+        instruction1.GetComponent<TextMesh>().transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        instruction1.GetComponent<TextMesh>().transform.localPosition = new Vector3(248.92f, 16.08f, 147.36f);
     }
+
+    private void Tutorial1()
+    {
+        
+        tut1 = new MovingFence(movingItems[0], new Vector3(254.665f, 1.02f, 130f));
+        tut1.CurrentObject.transform.name = "Tutorial1";
+
+        Tut1_instruction = new GameObject();
+        Tut1_instruction.AddComponent<TextMesh>();
+        Tut1_instruction.GetComponent<TextMesh>().text = "Preform faster throwing movement for a higher velocity";
+        Tut1_instruction.GetComponent<TextMesh>().fontStyle = FontStyle.Bold;
+        Tut1_instruction.GetComponent<TextMesh>().name = "Tut1_instruction";
+        Tut1_instruction.GetComponent<TextMesh>().fontSize = 120;
+        Tut1_instruction.GetComponent<Renderer>().material.color = Color.white;
+        Tut1_instruction.GetComponent<TextMesh>().transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        Tut1_instruction.GetComponent<TextMesh>().transform.localPosition = new Vector3(248.92f, 16.08f, 147.36f);
+    }
+
+
+    private void Tutorial2()
+    {
+        tut2 = new MovingWallE(movingItems[2], new Vector3(254.665f, 1.02f, 130f));
+        tut2.CurrentObject.transform.name = "Tutorial2";
+
+        Tut2_instruction = new GameObject();
+        Tut2_instruction.AddComponent<TextMesh>();
+        Tut2_instruction.GetComponent<TextMesh>().text = "Some items require more than one hit";
+        Tut2_instruction.GetComponent<TextMesh>().fontStyle = FontStyle.Bold;
+        Tut2_instruction.GetComponent<TextMesh>().name = "Tut2_instruction";
+        Tut2_instruction.GetComponent<TextMesh>().fontSize = 120;
+        Tut2_instruction.GetComponent<Renderer>().material.color = Color.white;
+        Tut2_instruction.GetComponent<TextMesh>().transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        Tut2_instruction.GetComponent<TextMesh>().transform.localPosition = new Vector3(248.92f, 16.08f, 147.36f);
+    }
+
+    private void Tutorial3()
+    {
+
+    }
+
+    private void startTutorial(int num)
+    {
+        tutorial = true;
+        switch (num)
+        {
+            case 1:
+                Tutorial1();
+                break;
+            case 2:
+                Tutorial2();
+                break;
+            case 3:
+                Tutorial3();
+                break;
+            default:
+                initGame(); ////////////////////////// MAYBE CAUSE PROBLEM!!
+                break;
+        }
+        current_tut_num++;
+    }
+
+
+  
 
     private void gameOver()
     {
