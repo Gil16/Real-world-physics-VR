@@ -595,6 +595,7 @@ public class RespawnObject : MonoBehaviour {
         Tut1_instruction.GetComponent<Renderer>().material.color = Color.white;
         Tut1_instruction.GetComponent<TextMesh>().transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         Tut1_instruction.GetComponent<TextMesh>().transform.localPosition = new Vector3(245.28f, 16.08f, 147.36f);
+        LeftHand_BallManager.wind_on = false;
     }
 
 
@@ -622,6 +623,7 @@ public class RespawnObject : MonoBehaviour {
         Tut2_instruction.GetComponent<Renderer>().material.color = Color.white;
         Tut2_instruction.GetComponent<TextMesh>().transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         Tut2_instruction.GetComponent<TextMesh>().transform.localPosition = new Vector3(252.09f, 16.08f, 147.36f);
+        LeftHand_BallManager.wind_on = false;
     }
 
     private void Tutorial3()
