@@ -85,7 +85,7 @@ public class LeftHand_BallManager : MonoBehaviour
         {
             Damage = 150;
             Speed = 3f;
-            Scale = new Vector3(0.48f, 0.48f, 0.48f);
+            Scale = new Vector3(0.31f, 0.31f, 0.31f);
             Ball_Object = Instantiate(spikeBall);
 
             Ball_Object.transform.localScale = Scale;
@@ -100,7 +100,7 @@ public class LeftHand_BallManager : MonoBehaviour
         {
             Damage = 100;
             Speed = 3f;
-            Scale = new Vector3(0.7f, 0.7f, 0.7f);
+            Scale = new Vector3(0.5f, 0.5f, 0.5f);
             Ball_Object = Instantiate(spikeBall);
 
             Ball_Object.transform.localScale = Scale;
@@ -115,7 +115,7 @@ public class LeftHand_BallManager : MonoBehaviour
         {
             Damage = 200;
             Speed = 3f;
-            Scale = new Vector3(0.55f, 0.55f, 0.55f);
+            Scale = new Vector3(0.45f, 0.45f, 0.45f);
             Ball_Object = Instantiate(spikeBall);
 
             Ball_Object.transform.localScale = Scale;
