@@ -255,7 +255,7 @@ public class RespawnObject : MonoBehaviour {
             CurrentObject.transform.localRotation = Rotation;
         }
 
-        public MovingWallE(GameObject wallE, Vector3 position, bool transparent)
+        public MovingWallE(GameObject wallE, Vector3 position)
         {
             Hp = 180;
             Score = 10;
@@ -268,13 +268,7 @@ public class RespawnObject : MonoBehaviour {
             CurrentObject.transform.position = StartingPosition;
             CurrentObject.transform.localScale = Scale;
             CurrentObject.transform.localRotation = Rotation;
-
-            if (transparent)
-            {
-                Color temp = CurrentObject.GetComponent<Renderer>().material.color;
-                CurrentObject.GetComponent<Renderer>().material.color = new Color(temp.r, temp.g, temp.b ,0);
-                Debug.Log("Im transparent!");
-            }
+           
         }
 
     }
@@ -296,6 +290,20 @@ public class RespawnObject : MonoBehaviour {
             CurrentObject.transform.localRotation = Rotation;
         }
 
+        public MovingElephant(GameObject elephant,Vector3 position)
+        {
+            Hp = 100;
+            Score = 6;
+            Speed = 4f;
+            StartingPosition = position;
+            Scale = new Vector3(100f, 100f, 100f);
+            Rotation = Quaternion.Euler(0f, 180f, 0f);
+            CurrentObject = Instantiate(elephant);
+
+            CurrentObject.transform.position = StartingPosition;
+            CurrentObject.transform.localScale = Scale;
+            CurrentObject.transform.localRotation = Rotation;
+        }
     }
 
 
@@ -308,7 +316,7 @@ public class RespawnObject : MonoBehaviour {
         } 
     }    
 	
-	// Update is called once per frameW
+	// Update is called once per frame
 	void Update () {
         if (start_game && !game_over)
         {
@@ -356,7 +364,14 @@ public class RespawnObject : MonoBehaviour {
 
         if (tut_timer) {
             int curr_timer = (int)(3 - (Mathf.Floor(Time.realtimeSinceStartup - current_time_tut)));
-            timer_text_count.GetComponent<TextMesh>().text = "Good Job!, Next tutorial in : " + curr_timer;
+            if (current_tut_num == 4)
+            {
+                timer_text_count.GetComponent<TextMesh>().text = "Good job tutorial is finished!";
+            }
+            else
+            {
+                timer_text_count.GetComponent<TextMesh>().text = "Good Job!, Next tutorial in : " + curr_timer;
+            }
             if (current_time_tut + 3f < Time.realtimeSinceStartup) {                
                 timer_text_count.GetComponent<TextMesh>().text = "";                
             }
@@ -374,17 +389,11 @@ public class RespawnObject : MonoBehaviour {
         {
             DestoryButtons();
 
-            if (game_over)
-            {
-                text_gameover.GetComponent<TextMesh>().text = "";
-                Destroy(text_gameover);
-                game_over = false;
-            }
-
             start_game = true;
             tutorial = false;
             startTimer();
-            startScore();      
+            startScore();
+            Destroy(gameObject);
             return;
         }
         else if (collision.gameObject.name == "TutorialButton") {
@@ -399,6 +408,8 @@ public class RespawnObject : MonoBehaviour {
             current_time_tut = Time.realtimeSinceStartup;
             tut_timer = true;
             Destroy(Tut1_instruction);
+            Destroy(gameObject);
+            return;
         }
         else if (collision.gameObject.name == "Transparent_Tutorial2")
         {
@@ -410,7 +421,8 @@ public class RespawnObject : MonoBehaviour {
             tut2.Hp = 1;
             return;
         }
-        else if (collision.gameObject.name == "Tutorial2" && transparent_wall==null) {
+        else if (collision.gameObject.name == "Tutorial2" && transparent_wall == null)
+        {
             Destroy(collision.gameObject);
             Tut2_instruction.GetComponent<TextMesh>().text = "";
             Destroy(Tut2_instruction);
@@ -419,6 +431,19 @@ public class RespawnObject : MonoBehaviour {
 
             GameObject exp = Instantiate(explosionPrefab, collision.contacts[0].point, Quaternion.identity);
             Destroy(exp, 3);
+            Destroy(gameObject);
+            return;
+        }
+        else if (collision.gameObject.name == "Tutorial3") {
+            Tut3_instruction.GetComponent<TextMesh>().text = "";
+            Destroy(Tut3_instruction);
+            Destroy(gameObject);
+            Destroy(collision.gameObject);
+            current_time_tut = Time.realtimeSinceStartup;
+            tut_timer = true;
+            LeftHand_BallManager.wind_on = false;
+            tutorial = false;
+            return;
         }
         if (collision.gameObject.name == "Plane")
         {
@@ -462,6 +487,12 @@ public class RespawnObject : MonoBehaviour {
 
     private void DestoryButtons()
     {
+        if (game_over)
+        {
+            text_gameover.GetComponent<TextMesh>().text = "";
+            Destroy(text_gameover);
+            game_over = false;
+        }
         Destroy(startGameButton);
         Destroy(tutorialGameButton);
 
@@ -471,8 +502,11 @@ public class RespawnObject : MonoBehaviour {
         tutorialText.GetComponent<TextMesh>().text = "";
         Destroy(tutorialText);
 
-        instruction1.GetComponent<TextMesh>().text = "";
-        Destroy(instruction1);
+        if (instruction1)
+        {
+            instruction1.GetComponent<TextMesh>().text = "";
+            Destroy(instruction1);
+        }
     }
 
     private void initGame()
@@ -481,6 +515,8 @@ public class RespawnObject : MonoBehaviour {
         movingItems[1] = wallEPrefab;
         movingItems[2] = elephantPrefab;
         current_tut_num = 1;
+        LeftHand_BallManager.wind_on = false;        
+        tutorial = false;
 
         timer_text_count = new GameObject();
         timer_text_count.AddComponent<TextMesh>();
@@ -521,15 +557,18 @@ public class RespawnObject : MonoBehaviour {
         tutorialText.GetComponent<TextMesh>().transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         tutorialText.GetComponent<TextMesh>().transform.localPosition = new Vector3(262.71f, 5.87f, 111.51f);
 
-        instruction1 = new GameObject();
-        instruction1.AddComponent<TextMesh>();
-        instruction1.GetComponent<TextMesh>().text = "Choose your option by throwing the ball";
-        instruction1.GetComponent<TextMesh>().fontStyle = FontStyle.Bold;
-        instruction1.GetComponent<TextMesh>().name = "instruction1";
-        instruction1.GetComponent<TextMesh>().fontSize = 120;
-        instruction1.GetComponent<Renderer>().material.color = Color.white;
-        instruction1.GetComponent<TextMesh>().transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-        instruction1.GetComponent<TextMesh>().transform.localPosition = new Vector3(248.92f, 16.08f, 147.36f);
+        if (!game_over)
+        {
+            instruction1 = new GameObject();
+            instruction1.AddComponent<TextMesh>();
+            instruction1.GetComponent<TextMesh>().text = "Choose your option by throwing the ball";
+            instruction1.GetComponent<TextMesh>().fontStyle = FontStyle.Bold;
+            instruction1.GetComponent<TextMesh>().name = "instruction1";
+            instruction1.GetComponent<TextMesh>().fontSize = 120;
+            instruction1.GetComponent<Renderer>().material.color = Color.white;
+            instruction1.GetComponent<TextMesh>().transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            instruction1.GetComponent<TextMesh>().transform.localPosition = new Vector3(248.92f, 16.08f, 147.36f);
+        }
     }
 
     private void Tutorial1()
@@ -552,7 +591,7 @@ public class RespawnObject : MonoBehaviour {
 
     private void Tutorial2()
     {
-        tut2 = new MovingWallE(movingItems[1], new Vector3(254.665f, 1.02f, 130f), false);
+        tut2 = new MovingWallE(movingItems[1], new Vector3(254.665f, 1.02f, 130f));
         tut2.CurrentObject.transform.name = "Tutorial2";
         tut2.CurrentObject.GetComponent<Rigidbody>().useGravity = false;
         tut2.CurrentObject.GetComponent<Rigidbody>().detectCollisions = false;
@@ -578,17 +617,27 @@ public class RespawnObject : MonoBehaviour {
 
     private void Tutorial3()
     {
-        demand_ball = 0;
+        demand_ball = RANDOM_BALL;
+
+        tut3 = new MovingElephant(movingItems[2], new Vector3(261.4f, 6.32f, 144.79f));
+        tut3.CurrentObject.transform.name = "Tutorial3";
+        tut3.CurrentObject.GetComponent<Rigidbody>().useGravity = true;
+        tut3.CurrentObject.GetComponent<Rigidbody>().drag = 0;
+        tut3.CurrentObject.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+        tut3.CurrentObject.GetComponent<Rigidbody>().freezeRotation = true;
 
         Tut3_instruction = new GameObject();
         Tut3_instruction.AddComponent<TextMesh>();
-        Tut3_instruction.GetComponent<TextMesh>().text = "The wind moves the ball direction";
+        Tut3_instruction.GetComponent<TextMesh>().text = "The ball moves in the wind direction";
         Tut3_instruction.GetComponent<TextMesh>().fontStyle = FontStyle.Bold;
         Tut3_instruction.GetComponent<TextMesh>().name = "Tut3_instruction";
         Tut3_instruction.GetComponent<TextMesh>().fontSize = 120;
         Tut3_instruction.GetComponent<Renderer>().material.color = Color.white;
         Tut3_instruction.GetComponent<TextMesh>().transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         Tut3_instruction.GetComponent<TextMesh>().transform.localPosition = new Vector3(248.92f, 16.08f, 147.36f);
+
+        LeftHand_BallManager.wind_on = true;
+        LeftHand_BallManager.right_wind = true;
 
     }
 
@@ -599,18 +648,21 @@ public class RespawnObject : MonoBehaviour {
         {
             case 1:
                 Tutorial1();
+                current_tut_num++;
                 break;
             case 2:
                 Tutorial2();
+                current_tut_num++;
                 break;
             case 3:
                 Tutorial3();
+                current_tut_num++;
                 break;
             default:
                 initGame(); ////////////////////////// MAYBE CAUSE PROBLEM!!
                 break;
         }
-        current_tut_num++;
+        
     }
 
 

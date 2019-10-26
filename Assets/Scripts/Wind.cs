@@ -28,7 +28,10 @@ public class Wind : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (LeftHand_BallManager.wind_on && LeftHand_BallManager.right_wind && RespawnObject.start_game && !windFromRight.isPlaying)
+        if (LeftHand_BallManager.wind_on && RespawnObject.tutorial && LeftHand_BallManager.right_wind) {
+            windFromLeft.Play();
+        }
+        else if (LeftHand_BallManager.wind_on && LeftHand_BallManager.right_wind && RespawnObject.start_game && !windFromRight.isPlaying)
         {
             windFromLeft.Play();
         }
@@ -51,7 +54,13 @@ public class Wind : MonoBehaviour
             windFromRight.Stop();
             windFromLeft.Clear();
             windFromRight.Clear();
-        }    
-              
+        }
+        else if (!RespawnObject.tutorial)
+        {
+            windFromLeft.Stop();
+            windFromRight.Stop();
+            windFromLeft.Clear();
+            windFromRight.Clear();
+        }
     }
 }

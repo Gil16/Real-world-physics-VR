@@ -301,6 +301,14 @@ public class LeftHand_BallManager : MonoBehaviour
     }
 
     private void windTimer() {
+        if (RespawnObject.tutorial && wind_on && ball.Ball_Object.GetComponent<Rigidbody>())
+        {
+            MoveBall();
+            return;
+        }
+        if (RespawnObject.tutorial) {
+            return;
+        }
         if (((Mathf.Floor(Time.time - RespawnObject.startTime + 1) % 20) == 0) && change_wind && !RespawnObject.game_over)
         {
             change_wind = false;
